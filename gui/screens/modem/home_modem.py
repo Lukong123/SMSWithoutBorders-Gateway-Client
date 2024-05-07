@@ -121,7 +121,7 @@ class HomeModemWindow(Gtk.Box):
 
     def apply_css(self):
         css_provider = Gtk.CssProvider()
-        css_path = "gui/utils/styles/styles.css"
+        css_path = "utils/styles/styles.css"
         # Load the CSS rules into the provider
         css_provider.load_from_path(css_path)
 
