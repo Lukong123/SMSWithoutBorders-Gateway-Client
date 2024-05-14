@@ -8,6 +8,11 @@ from screens.modem.home_modem import HomeModemWindow
 from screens.modem.outgoing_message import OutgoingMessageWindow
 from screens.modem.failed_message import FailedMessageWindow
 from screens.modem.encrypted_message import EncryptedMessageWindow
+from screens.modem.message_forwarding import MessageForwardingWindow
+from screens.modem.export_message import ExportMessageWindow
+from screens.modem.about import AboutWindow
+
+from utils.widgets.horizontal_line import HorizontalLine
 
 class ModemWindow(Gtk.Window):
     def __init__(self):
@@ -79,6 +84,7 @@ class ModemWindow(Gtk.Window):
         incoming_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         incoming_event_box.connect("button-press-event", self.on_incoming_clicked, stack)
         
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
         sidebar_top.pack_start(incoming_event_box, False, False, 0)
 
         # outgoing
@@ -91,7 +97,8 @@ class ModemWindow(Gtk.Window):
         outgoing_event_box.add(outgoing_label)
         outgoing_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         outgoing_event_box.connect("button-press-event", self.on_outgoing_clicked, stack)
-        
+
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
         sidebar_top.pack_start(outgoing_event_box, False, False, 0)
 
         # failed
@@ -104,14 +111,15 @@ class ModemWindow(Gtk.Window):
         failed_event_box.add(failed_label)
         failed_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
         failed_event_box.connect("button-press-event", self.on_failed_clicked, stack)
-        
+
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
         sidebar_top.pack_start(failed_event_box, False, False, 0)
 
         # encrypted
         encrypted_label = Gtk.Label()
         encrypted_label.set_text("Encrypted")
         encrypted_label.set_name("side_label")
-        encrypted_label.set_margin_bottom(8)
+        encrypted_label.set_margin_bottom(38)
         encrypted_label.set_margin_top(8)
         encrypted_event_box = Gtk.EventBox()
         encrypted_event_box.add(encrypted_label)
@@ -119,6 +127,52 @@ class ModemWindow(Gtk.Window):
         encrypted_event_box.connect("button-press-event", self.on_encrypted_clicked, stack)
         
         sidebar_top.pack_start(encrypted_event_box, False, False, 0)
+
+        line = HorizontalLine()
+        sidebar_top.pack_start(line, False, False, 0)
+
+
+        # message forwarding
+        message_forwarding_label = Gtk.Label()
+        message_forwarding_label.set_text("Message Forwarding")
+        message_forwarding_label.set_name("side_label")
+        message_forwarding_label.set_margin_bottom(8)
+        message_forwarding_label.set_margin_top(38)
+        message_forwarding_event_box = Gtk.EventBox()
+        message_forwarding_event_box.add(message_forwarding_label)
+        message_forwarding_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        message_forwarding_event_box.connect("button-press-event", self.on_message_forwarding_clicked, stack)
+        
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        sidebar_top.pack_start(message_forwarding_event_box, False, False, 0)
+
+        # export
+        export_label = Gtk.Label()
+        export_label.set_text("Export")
+        export_label.set_name("side_label")
+        export_label.set_margin_bottom(8)
+        export_label.set_margin_top(8)
+        export_event_box = Gtk.EventBox()
+        export_event_box.add(export_label)
+        export_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        export_event_box.connect("button-press-event", self.on_export_clicked, stack)
+        
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        sidebar_top.pack_start(export_event_box, False, False, 0)
+
+        # about
+        about_label = Gtk.Label()
+        about_label.set_text("About")
+        about_label.set_name("side_label")
+        about_label.set_margin_bottom(8)
+        about_label.set_margin_top(8)
+        about_event_box = Gtk.EventBox()
+        about_event_box.add(about_label)
+        about_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        about_event_box.connect("button-press-event", self.on_about_clicked, stack)
+        
+        line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        sidebar_top.pack_start(about_event_box, False, False, 0)
 
         self.initialize_views(stack)
 
@@ -147,7 +201,21 @@ class ModemWindow(Gtk.Window):
         # encrypted view
         encrypted_view = EncryptedMessageWindow()
         stack.add_named(encrypted_view, "encrypted")
-        
+
+        # message forwarding view
+        message_forwarding_view = MessageForwardingWindow()
+        stack.add_named(message_forwarding_view, "message_forwarding")
+
+        # export view
+        export_view = ExportMessageWindow()
+        stack.add_named(export_view, "export")
+
+        # about view
+        about_view = AboutWindow()
+        stack.add_named(about_view, "about")
+
+
+
     def on_home_modem_clicked(self, widget, event, stack):
         stack.set_visible_child_name("home_modem")
 
@@ -171,7 +239,29 @@ class ModemWindow(Gtk.Window):
         stack.set_visible_child_name("encrypted")
         self.set_active_label("encrypted_label")
 
+    def on_message_forwarding_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("message_forwarding")
+        self.set_active_label("message_forwarding_label")
 
+    def on_export_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("export")
+        self.set_active_label("export_label")
+
+    def on_about_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("about")
+        self.set_active_label("about_label")
+
+    def on_test_clicked(self, widget, event, stack):
+        popover = Gtk.Popover.new_from_widget(widget)
+        popover.set_position(Gtk.PositionType.BOTTOM)
+        
+        item1 = Gtk.Label()
+        item1.set_text("item 1")
+
+        item2 = Gtk.Label()
+        item2.set_text("Item 2")
+
+        # dropdownbox = Gtk.
 
     def set_active_label(self, label_name):
         sidebar = self.get_child().get_children()[0]
