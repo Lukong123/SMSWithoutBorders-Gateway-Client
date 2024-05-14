@@ -24,42 +24,96 @@ class IncomingMessageWindow(Gtk.Box):
         container1.set_border_width(10)
         self.pack_start(container1, True, True, 0)
 
-        # message content
+        # Create the navigation bar
+        nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        nav_bar.set_size_request(-1, 50)
+        nav_bar.set_homogeneous(False)
+        # nav_bar.set_border_width(10)
+        nav_bar.set_name("nav-bar")
 
-        row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        row1.set_size_request(-1, 50)
-        row1.set_homogeneous(False)
-        # row1.set_border_width(10)
-        row1.set_name("nav-bar")
-        container1.pack_start(row1, False, False, 0)
+        container1.pack_start(nav_bar, False, False, 0)
 
         # Create a box for the left side of the navigation bar
-        left_box_row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        left_box_row1.set_homogeneous(True)
-        row1.pack_start(left_box_row1, False, False, 0)
+        left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        left_box.set_homogeneous(True)
+        nav_bar.pack_start(left_box, False, False, 0)
 
+        title_label = Gtk.Label()
+        title_label.set_text("Deku Linux")
+        title_label.set_name("title-label") 
+        left_box.pack_start(title_label, False, False, 20)
 
-        # Create a box for the right side of the navigation bar
-        right_box_row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        right_box_row1.set_homogeneous(True)
-        row1.pack_end(right_box_row1, False, False, 20)
+        right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        right_box.set_homogeneous(True)
+        nav_bar.pack_end(right_box, False, False, 0)
 
-        # Icon
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
-        right_box_row1.pack_end(nav_icon, False, False, 0)
+        right_box.pack_end(nav_icon, False, False, 20)
 
 
-        # container1 main
-        center_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        center_box.set_halign(Gtk.Align.CENTER)
-        center_box.set_name("center-box-sms")
-        container1.pack_start(center_box, False, False, 0)
 
+        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+        container_main.set_halign(Gtk.Align.CENTER)
+        container_main.set_name("container_main_msg")
+        container1.pack_start(container_main, False, False, 0)
 
-        # device label
-        device_label = Gtk.Label()
-        device_label.set_text("MTN 4.2")
-        center_box.pack_start(device_label, False, False, 30)
+        row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        row1.set_homogeneous(False)
+        row1.set_name("row1") 
+        container_main.pack_start(row1, True, False, 0)
+
+        left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        left_box.set_homogeneous(True)
+        row1.pack_start(left_box, True, False, 0)
+
+        number_label = Gtk.Label()
+        number_label.set_text("Phone Number")
+        number_label.set_name("number-label")
+        left_box.pack_start(number_label, False, False, 20)
+
+        right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        right_box.set_homogeneous(True)
+        row1.pack_end(right_box, True, False, 0)
+
+        time_label = Gtk.Label()
+        time_label.set_text("06:08 pm")
+        time_label.set_name("time-label") 
+        right_box.pack_end(time_label, False, False, 5)
+
+        row2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        row2.set_homogeneous(False)
+        row2.set_name("row2") 
+        container_main.pack_start(row2, True, False, 0)
+
+        left_box2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        left_box2.set_homogeneous(True)
+        row2.pack_start(left_box2, True, False, 0)
+
+        message_label = Gtk.Label()
+        message_label.set_text("Message...")
+        message_label.set_name("message-label")
+        left_box2.pack_start(message_label, True, False, 5)
+
+        row3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        row3.set_homogeneous(False)
+        row3.set_name("row3") 
+        container_main.pack_start(row3, True, False, 0)
+
+        left_box3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        left_box3.set_homogeneous(True)
+        row3.pack_start(left_box3, True, False, 0)
+
+        delete_icon = Gtk.Image.new_from_icon_name("edit-delete", Gtk.IconSize.BUTTON)
+        left_box3.pack_start(delete_icon, True, False, 5)
+
+        right_box_3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        right_box_3.set_homogeneous(True)
+        row3.pack_end(right_box_3, True, False, 0)
+
+        reply_label = Gtk.Label()
+        reply_label.set_text("Reply")
+        reply_label.set_name("time-label") 
+        right_box_3.pack_end(reply_label, True, False, 5)
 
         # floating action button
         fab_button = Gtk.Button()

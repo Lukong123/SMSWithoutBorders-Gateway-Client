@@ -17,6 +17,8 @@ class ModemWindow(Gtk.Window):
         main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.add(main_box)
 
+        
+
         # Create the sidebar
         sidebar = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         sidebar.set_size_request(150, -1)
@@ -24,6 +26,7 @@ class ModemWindow(Gtk.Window):
         sidebar.set_border_width(0)
         sidebar.set_name("sidebar")
         main_box.pack_start(sidebar, False, False, 0)
+        
 
         # Create the stack to switch between views
         stack = Gtk.Stack()

@@ -44,7 +44,7 @@ class DekuLinux(Gtk.Window):
         nav_bar.pack_end(right_box, False, False, 0)
 
         # icon
-        nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        nav_icon = Gtk.Image.new_from_icon_name("symbolic-grid", Gtk.IconSize.SMALL_TOOLBAR)
         right_box.pack_end(nav_icon, False, False, 20)
 
         # Horizontal line widget
@@ -119,9 +119,9 @@ class DekuLinux(Gtk.Window):
 
         self.show_all()
 
-        screen = self.get_screen()
-        max_width = screen.get_width()
-        self.set_size_request(max_width, -1)
+        # screen = self.get_screen()
+        # max_width = screen.get_width()
+        # self.set_size_request(max_width, -1)
 
         self.modem_window = ModemWindow()
 
@@ -129,6 +129,8 @@ class DekuLinux(Gtk.Window):
 
     def on_modem_1_click(self, widget, event):
         print("Modem 1 clicked!")
+        main_box = self.get_child()
+        main_box.remove(self.modem_window)
 
         # modem_window = ModemWindow()
         self.modem_window.show_all()
@@ -148,9 +150,6 @@ class DekuLinux(Gtk.Window):
     def run(self):
         Gtk.main()
 
-# if __name__ == "__main__":
-#     app = MyApp()
-#     app.run()
 if __name__ == "__main__":
     app = DekuLinux()
     app.run()
