@@ -83,3 +83,7 @@ margin-left: 10px;
 #container_main_msg {
     border: 1px solid darkblue;
 }
+
+#incoming_label, #send_label, .active{
+    color: green;
+}

@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Pango
 from utils.widgets.horizontal_line import HorizontalLine
 
 
@@ -32,11 +32,31 @@ class SendMessageWindow(Gtk.Box):
         number_entry.set_placeholder_text("Number:")
         container_main.pack_start(number_entry, False, False, 0)
 
-        # compose message
-        text_area = Gtk.Entry()
-        text_area.set_placeholder_text("Compose message...")
-        text_area.set_size_request(600, 400)
-        container_main.pack_start(text_area, False, False, 0)
+        self.grid = Gtk.Grid()
+
+        self.add(self.grid)
+
+
+        # self.create_textview()
+
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_size_request(600, 400)
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        scrolledwindow.set_margin_top(0)
+
+        textview  = Gtk.TextView()
+        textbuffer = textview.get_buffer()
+        textbuffer.set_text(
+            "Compose..."
+        )
+
+        scrolledwindow.add(textview)
+        # self.grid.attach(scrolledwindow, 0, 0, 1, 1)
+
+
+        container_main.pack_start(scrolledwindow, False, False, 0)
+        
 
         # Send button with label and logo
         send_button = Gtk.Button()
@@ -49,3 +69,5 @@ class SendMessageWindow(Gtk.Box):
         # Adjusting container size
         screen = Gdk.Screen.get_default()
         self.set_size_request(-1, int(screen.get_height() * 0.55))
+
+   

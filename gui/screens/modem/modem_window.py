@@ -5,7 +5,9 @@ from gi.repository import Gtk, Gdk
 from screens.modem.send_message import SendMessageWindow
 from screens.modem.incoming_message import IncomingMessageWindow
 from screens.modem.home_modem import HomeModemWindow
-
+from screens.modem.outgoing_message import OutgoingMessageWindow
+from screens.modem.failed_message import FailedMessageWindow
+from screens.modem.encrypted_message import EncryptedMessageWindow
 
 class ModemWindow(Gtk.Window):
     def __init__(self):
@@ -79,6 +81,45 @@ class ModemWindow(Gtk.Window):
         
         sidebar_top.pack_start(incoming_event_box, False, False, 0)
 
+        # outgoing
+        outgoing_label = Gtk.Label()
+        outgoing_label.set_text("Outgoing")
+        outgoing_label.set_name("side_label")
+        outgoing_label.set_margin_bottom(8)
+        outgoing_label.set_margin_top(8)
+        outgoing_event_box = Gtk.EventBox()
+        outgoing_event_box.add(outgoing_label)
+        outgoing_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        outgoing_event_box.connect("button-press-event", self.on_outgoing_clicked, stack)
+        
+        sidebar_top.pack_start(outgoing_event_box, False, False, 0)
+
+        # failed
+        failed_label = Gtk.Label()
+        failed_label.set_text("Failed")
+        failed_label.set_name("side_label")
+        failed_label.set_margin_bottom(8)
+        failed_label.set_margin_top(8)
+        failed_event_box = Gtk.EventBox()
+        failed_event_box.add(failed_label)
+        failed_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        failed_event_box.connect("button-press-event", self.on_failed_clicked, stack)
+        
+        sidebar_top.pack_start(failed_event_box, False, False, 0)
+
+        # encrypted
+        encrypted_label = Gtk.Label()
+        encrypted_label.set_text("Encrypted")
+        encrypted_label.set_name("side_label")
+        encrypted_label.set_margin_bottom(8)
+        encrypted_label.set_margin_top(8)
+        encrypted_event_box = Gtk.EventBox()
+        encrypted_event_box.add(encrypted_label)
+        encrypted_event_box.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        encrypted_event_box.connect("button-press-event", self.on_encrypted_clicked, stack)
+        
+        sidebar_top.pack_start(encrypted_event_box, False, False, 0)
+
         self.initialize_views(stack)
 
     def initialize_views(self, stack):
@@ -94,21 +135,58 @@ class ModemWindow(Gtk.Window):
         # incoming view
         incoming_view = IncomingMessageWindow()
         stack.add_named(incoming_view, "incoming")
+
+        # outgoing view
+        outgoing_view = OutgoingMessageWindow()
+        stack.add_named(outgoing_view, "outgoing")
+
+        # failed view
+        failed_view = FailedMessageWindow()
+        stack.add_named(failed_view, "failed")
+
+        # encrypted view
+        encrypted_view = EncryptedMessageWindow()
+        stack.add_named(encrypted_view, "encrypted")
         
     def on_home_modem_clicked(self, widget, event, stack):
         stack.set_visible_child_name("home_modem")
 
     def on_send_clicked(self, widget, event, stack):
         stack.set_visible_child_name("send")
+        self.set_active_label("send_label")
 
     def on_incoming_clicked(self, widget, event, stack):
         stack.set_visible_child_name("incoming")
+        self.set_active_label("incoming_label")
 
-    
+    def on_outgoing_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("outgoing")
+        self.set_active_label("outgoing_label")
+
+    def on_failed_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("failed")
+        self.set_active_label("failed_label")
+   
+    def on_encrypted_clicked(self, widget, event, stack):
+        stack.set_visible_child_name("encrypted")
+        self.set_active_label("encrypted_label")
 
 
 
-# if __name__ == "__main__":
-#     win = ModemWindow()
-#     win.show_all()
-#     Gtk.main()
+    def set_active_label(self, label_name):
+        sidebar = self.get_child().get_children()[0]
+        sidebar_top = sidebar.get_children()[0]
+
+        for child in sidebar_top.get_children():
+            if isinstance(child, Gtk.EventBox):
+                if child.get_children()[0].get_name() == "active":
+                    child.get_children()[0].set_name("side_label")
+                    child.get_children()[0].get_style_context().remove_class("active")
+
+                for child in sidebar_top.get_children():
+                    if isinstance(child, Gtk.EventBox):
+                        if child.get_children()[0].get_name() == label_name:
+                            child.get_children()[0].set_name("active")
+                            child.get_children()[0].get_style_context().add_class("active")
+
+
