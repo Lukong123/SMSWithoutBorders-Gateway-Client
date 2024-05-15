@@ -3,370 +3,170 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 
-from gi.repository import Gtk, Pango
+from gi.repository import Gtk
 
 
 
-class SearchDialog(Gtk.Dialog):
-
-    def __init__(self, parent):
-
-        super().__init__(title="Search", transient_for=parent, modal=True)
-
-        self.add_buttons(
-
-            Gtk.STOCK_FIND,
-
-            Gtk.ResponseType.OK,
-
-            Gtk.STOCK_CANCEL,
-
-            Gtk.ResponseType.CANCEL,
-
-        )
-
-
-        box = self.get_content_area()
-
-
-        label = Gtk.Label(label="Insert text you want to search for:")
-
-        box.add(label)
-
-
-        self.entry = Gtk.Entry()
-
-        box.add(self.entry)
-
-
-        self.show_all()
-
-
-
-class TextViewWindow(Gtk.Window):
+class ComboBoxWindow(Gtk.Window):
 
     def __init__(self):
 
-        Gtk.Window.__init__(self, title="TextView Example")
+        super().__init__(title="ComboBox Example")
 
 
-        self.set_default_size(-1, 350)
+        self.set_border_width(10)
 
 
-        self.grid = Gtk.Grid()
+        name_store = Gtk.ListStore(int, str)
 
-        self.add(self.grid)
+        name_store.append([1, "Billy Bob"])
 
+        name_store.append([11, "Billy Bob Junior"])
 
-        self.create_textview()
+        name_store.append([12, "Sue Bob"])
 
-        self.create_toolbar()
+        name_store.append([2, "Joey Jojo"])
 
-        self.create_buttons()
+        name_store.append([3, "Rob McRoberts"])
 
+        name_store.append([31, "Xavier McRoberts"])
 
-    def create_toolbar(self):
 
-        toolbar = Gtk.Toolbar()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
-        self.grid.attach(toolbar, 0, 0, 3, 1)
 
+        name_combo = Gtk.ComboBox.new_with_model_and_entry(name_store)
 
-        button_bold = Gtk.ToolButton()
+        name_combo.connect("changed", self.on_name_combo_changed)
 
-        button_bold.set_icon_name("format-text-bold-symbolic")
+        name_combo.set_entry_text_column(1)
 
-        toolbar.insert(button_bold, 0)
+        vbox.pack_start(name_combo, False, False, 0)
 
 
-        button_italic = Gtk.ToolButton()
+        country_store = Gtk.ListStore(str)
 
-        button_italic.set_icon_name("format-text-italic-symbolic")
+        countries = [
 
-        toolbar.insert(button_italic, 1)
+            "Austria",
 
+            "Brazil",
 
-        button_underline = Gtk.ToolButton()
+            "Belgium",
 
-        button_underline.set_icon_name("format-text-underline-symbolic")
+            "France",
 
-        toolbar.insert(button_underline, 2)
+            "Germany",
 
+            "Switzerland",
 
-        button_bold.connect("clicked", self.on_button_clicked, self.tag_bold)
+            "United Kingdom",
 
-        button_italic.connect("clicked", self.on_button_clicked, self.tag_italic)
+            "United States of America",
 
-        button_underline.connect("clicked", self.on_button_clicked, self.tag_underline)
+            "Uruguay",
 
+        ]
 
-        toolbar.insert(Gtk.SeparatorToolItem(), 3)
+        for country in countries:
 
+            country_store.append([country])
 
-        radio_justifyleft = Gtk.RadioToolButton()
 
-        radio_justifyleft.set_icon_name("format-justify-left-symbolic")
+        country_combo = Gtk.ComboBox.new_with_model(country_store)
 
-        toolbar.insert(radio_justifyleft, 4)
+        country_combo.connect("changed", self.on_country_combo_changed)
 
+        renderer_text = Gtk.CellRendererText()
 
-        radio_justifycenter = Gtk.RadioToolButton.new_from_widget(radio_justifyleft)
+        country_combo.pack_start(renderer_text, True)
 
-        radio_justifycenter.set_icon_name("format-justify-center-symbolic")
+        country_combo.add_attribute(renderer_text, "text", 0)
 
-        toolbar.insert(radio_justifycenter, 5)
+        vbox.pack_start(country_combo, False, False, True)
 
 
-        radio_justifyright = Gtk.RadioToolButton.new_from_widget(radio_justifyleft)
+        currencies = [
 
-        radio_justifyright.set_icon_name("format-justify-right-symbolic")
+            "Euro",
 
-        toolbar.insert(radio_justifyright, 6)
+            "US Dollars",
 
+            "British Pound",
 
-        radio_justifyfill = Gtk.RadioToolButton.new_from_widget(radio_justifyleft)
+            "Japanese Yen",
 
-        radio_justifyfill.set_icon_name("format-justify-fill-symbolic")
+            "Russian Ruble",
 
-        toolbar.insert(radio_justifyfill, 7)
+            "Mexican peso",
 
+            "Swiss franc",
 
-        radio_justifyleft.connect(
+        ]
 
-            "toggled", self.on_justify_toggled, Gtk.Justification.LEFT
+        currency_combo = Gtk.ComboBoxText()
 
-        )
+        currency_combo.set_entry_text_column(0)
 
-        radio_justifycenter.connect(
+        currency_combo.connect("changed", self.on_currency_combo_changed)
 
-            "toggled", self.on_justify_toggled, Gtk.Justification.CENTER
+        for currency in currencies:
 
-        )
+            currency_combo.append_text(currency)
 
-        radio_justifyright.connect(
 
-            "toggled", self.on_justify_toggled, Gtk.Justification.RIGHT
+        currency_combo.set_active(0)
 
-        )
+        vbox.pack_start(currency_combo, False, False, 0)
 
-        radio_justifyfill.connect(
 
-            "toggled", self.on_justify_toggled, Gtk.Justification.FILL
+        self.add(vbox)
 
-        )
 
+    def on_name_combo_changed(self, combo):
 
-        toolbar.insert(Gtk.SeparatorToolItem(), 8)
+        tree_iter = combo.get_active_iter()
 
+        if tree_iter is not None:
 
-        button_clear = Gtk.ToolButton()
+            model = combo.get_model()
 
-        button_clear.set_icon_name("edit-clear-symbolic")
+            row_id, name = model[tree_iter][:2]
 
-        button_clear.connect("clicked", self.on_clear_clicked)
+            print("Selected: ID=%d, name=%s" % (row_id, name))
 
-        toolbar.insert(button_clear, 9)
+        else:
 
+            entry = combo.get_child()
 
-        toolbar.insert(Gtk.SeparatorToolItem(), 10)
+            print("Entered: %s" % entry.get_text())
 
 
-        button_search = Gtk.ToolButton()
+    def on_country_combo_changed(self, combo):
 
-        button_search.set_icon_name("system-search-symbolic")
+        tree_iter = combo.get_active_iter()
 
-        button_search.connect("clicked", self.on_search_clicked)
+        if tree_iter is not None:
 
-        toolbar.insert(button_search, 11)
+            model = combo.get_model()
 
+            country = model[tree_iter][0]
 
-    def create_textview(self):
+            print("Selected: country=%s" % country)
 
-        scrolledwindow = Gtk.ScrolledWindow()
 
-        scrolledwindow.set_hexpand(True)
+    def on_currency_combo_changed(self, combo):
 
-        scrolledwindow.set_vexpand(True)
+        text = combo.get_active_text()
 
-        self.grid.attach(scrolledwindow, 0, 1, 3, 1)
+        if text is not None:
 
+            print("Selected: currency=%s" % text)
 
-        self.textview = Gtk.TextView()
 
-        self.textbuffer = self.textview.get_buffer()
 
-        self.textbuffer.set_text(
-
-            "This is some text inside of a Gtk.TextView. "
-
-            + "Select text and click one of the buttons 'bold', 'italic', "
-
-            + "or 'underline' to modify the text accordingly."
-
-        )
-
-        scrolledwindow.add(self.textview)
-
-
-        self.tag_bold = self.textbuffer.create_tag("bold", weight=Pango.Weight.BOLD)
-
-        self.tag_italic = self.textbuffer.create_tag("italic", style=Pango.Style.ITALIC)
-
-        self.tag_underline = self.textbuffer.create_tag(
-
-            "underline", underline=Pango.Underline.SINGLE
-
-        )
-
-        self.tag_found = self.textbuffer.create_tag("found", background="yellow")
-
-
-    def create_buttons(self):
-
-        check_editable = Gtk.CheckButton(label="Editable")
-
-        check_editable.set_active(True)
-
-        check_editable.connect("toggled", self.on_editable_toggled)
-
-        self.grid.attach(check_editable, 0, 2, 1, 1)
-
-
-        check_cursor = Gtk.CheckButton(label="Cursor Visible")
-
-        check_cursor.set_active(True)
-
-        check_editable.connect("toggled", self.on_cursor_toggled)
-
-        self.grid.attach_next_to(
-
-            check_cursor, check_editable, Gtk.PositionType.RIGHT, 1, 1
-
-        )
-
-
-        radio_wrapnone = Gtk.RadioButton.new_with_label_from_widget(None, "No Wrapping")
-
-        self.grid.attach(radio_wrapnone, 0, 3, 1, 1)
-
-
-        radio_wrapchar = Gtk.RadioButton.new_with_label_from_widget(
-
-            radio_wrapnone, "Character Wrapping"
-
-        )
-
-        self.grid.attach_next_to(
-
-            radio_wrapchar, radio_wrapnone, Gtk.PositionType.RIGHT, 1, 1
-
-        )
-
-
-        radio_wrapword = Gtk.RadioButton.new_with_label_from_widget(
-
-            radio_wrapnone, "Word Wrapping"
-
-        )
-
-        self.grid.attach_next_to(
-
-            radio_wrapword, radio_wrapchar, Gtk.PositionType.RIGHT, 1, 1
-
-        )
-
-
-        radio_wrapnone.connect("toggled", self.on_wrap_toggled, Gtk.WrapMode.NONE)
-
-        radio_wrapchar.connect("toggled", self.on_wrap_toggled, Gtk.WrapMode.CHAR)
-
-        radio_wrapword.connect("toggled", self.on_wrap_toggled, Gtk.WrapMode.WORD)
-
-
-    def on_button_clicked(self, widget, tag):
-
-        bounds = self.textbuffer.get_selection_bounds()
-
-        if len(bounds) != 0:
-
-            start, end = bounds
-
-            self.textbuffer.apply_tag(tag, start, end)
-
-
-    def on_clear_clicked(self, widget):
-
-        start = self.textbuffer.get_start_iter()
-
-        end = self.textbuffer.get_end_iter()
-
-        self.textbuffer.remove_all_tags(start, end)
-
-
-    def on_editable_toggled(self, widget):
-
-        self.textview.set_editable(widget.get_active())
-
-
-    def on_cursor_toggled(self, widget):
-
-        self.textview.set_cursor_visible(widget.get_active())
-
-
-    def on_wrap_toggled(self, widget, mode):
-
-        self.textview.set_wrap_mode(mode)
-
-
-    def on_justify_toggled(self, widget, justification):
-
-        self.textview.set_justification(justification)
-
-
-    def on_search_clicked(self, widget):
-
-        dialog = SearchDialog(self)
-
-        response = dialog.run()
-
-        if response == Gtk.ResponseType.OK:
-
-            cursor_mark = self.textbuffer.get_insert()
-
-            start = self.textbuffer.get_iter_at_mark(cursor_mark)
-
-            if start.get_offset() == self.textbuffer.get_char_count():
-
-                start = self.textbuffer.get_start_iter()
-
-
-            self.search_and_mark(dialog.entry.get_text(), start)
-
-
-        dialog.destroy()
-
-
-    def search_and_mark(self, text, start):
-
-        end = self.textbuffer.get_end_iter()
-
-        match = start.forward_search(text, 0, end)
-
-
-        if match is not None:
-
-            match_start, match_end = match
-
-            self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
-
-            self.search_and_mark(text, match_end)
-
-
-
-win = TextViewWindow()
+win = ComboBoxWindow()
 
 win.connect("destroy", Gtk.main_quit)
 
 win.show_all()
-
-Gtk.main()

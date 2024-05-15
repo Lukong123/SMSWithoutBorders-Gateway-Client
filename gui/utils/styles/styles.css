@@ -87,3 +87,7 @@ margin-left: 10px;
 #incoming_label, #send_label, .active{
     color: green;
 }
+
+#test{
+    color: black;
+}
