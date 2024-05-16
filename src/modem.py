@@ -4,7 +4,7 @@ import dbus
 from enum import Enum
 import logging
 
-from messaging import Messaging
+from src.messaging import Messaging
 
 dbus_name = 'org.freedesktop.ModemManager1'
 modem_dbus_props_iface = 'org.freedesktop.DBus.Properties'

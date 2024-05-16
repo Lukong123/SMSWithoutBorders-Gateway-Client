@@ -4,7 +4,7 @@ from enum import Enum
 import logging
 import time
 
-from sms import SMS
+from src.sms import SMS
 
 dbus_name = 'org.freedesktop.ModemManager1'
 modem_dbus_props_iface = 'org.freedesktop.DBus.Properties'

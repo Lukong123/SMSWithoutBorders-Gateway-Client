@@ -10,7 +10,7 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 
-from modem import Modem
+from src.modem import Modem
 
 from enum import Enum
 
