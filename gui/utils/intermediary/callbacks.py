@@ -1,6 +1,8 @@
 # from src.modem_manager import ModemManager
 from src.modem_manager import ModemManager
 
+
+
 def modem_connected_callback(modem):
     print("modem connected")
 

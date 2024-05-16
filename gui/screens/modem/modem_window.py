@@ -2,17 +2,17 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
-from screens.modem.send_message import SendMessageWindow
-from screens.modem.incoming_message import IncomingMessageWindow
-from screens.modem.home_modem import HomeModemWindow
-from screens.modem.outgoing_message import OutgoingMessageWindow
-from screens.modem.failed_message import FailedMessageWindow
-from screens.modem.encrypted_message import EncryptedMessageWindow
-from screens.modem.message_forwarding import MessageForwardingWindow
-from screens.modem.export_message import ExportMessageWindow
-from screens.modem.about import AboutWindow
+from gui.screens.modem.send_message import SendMessageWindow
+from gui.screens.modem.incoming_message import IncomingMessageWindow
+from gui.screens.modem.home_modem import HomeModemWindow
+from gui.screens.modem.outgoing_message import OutgoingMessageWindow
+from gui.screens.modem.failed_message import FailedMessageWindow
+from gui.screens.modem.encrypted_message import EncryptedMessageWindow
+from gui.screens.modem.message_forwarding import MessageForwardingWindow
+from gui.screens.modem.export_message import ExportMessageWindow
+from gui.screens.modem.about import AboutWindow
 
-from utils.widgets.horizontal_line import HorizontalLine
+from gui.utils.widgets.horizontal_line import HorizontalLine
 
 class ModemWindow(Gtk.Window):
     def __init__(self):

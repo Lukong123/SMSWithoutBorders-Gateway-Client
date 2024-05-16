@@ -4,7 +4,7 @@ from gi.repository import Gtk, Gdk
 
 import subprocess
 
-from utils.widgets.horizontal_line import HorizontalLine
+from gui.utils.widgets.horizontal_line import HorizontalLine
 
 
 class EncryptedMessageWindow(Gtk.Box):
@@ -140,7 +140,7 @@ class EncryptedMessageWindow(Gtk.Box):
 
     def apply_css(self):
         css_provider = Gtk.CssProvider()
-        css_path = "utils/styles/styles.css"
+        css_path = "gui/utils/styles/styles.css"
         # Load the CSS rules into the provider
         css_provider.load_from_path(css_path)
 
