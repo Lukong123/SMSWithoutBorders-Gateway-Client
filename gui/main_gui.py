@@ -1,10 +1,11 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
-from utils.widgets.horizontal_line import HorizontalLine
-# from screens.modem.modem_home import ModemWindow
+from gui.utils.widgets.horizontal_line import HorizontalLine
 
-from screens.modem.modem_window import ModemWindow
+from gui.screens.modem.modem_window import ModemWindow
+
+from src.api_callbacks import callback_function, ModemPass, callback_function_name
 
 
 class DekuLinux(Gtk.Window):
@@ -108,9 +109,14 @@ class DekuLinux(Gtk.Window):
         container1.pack_start(center_box, False, False, 0)
 
         # device label
-        device_label = Gtk.Label()
-        device_label.set_text("2 devices")
-        center_box.pack_start(device_label, False, False, 30)
+        self.device_label = Gtk.Label()
+        self.modem_label = Gtk.Label()
+        center_box.pack_start(self.device_label, False, False, 30)
+        center_box.pack_start(self.modem_label, False, False, 30)
+
+        self.update_device_label()
+        self.update_modem_label()
+
     
         main_box.pack_end(container1, True, True, 0)
 
@@ -118,26 +124,36 @@ class DekuLinux(Gtk.Window):
         self.apply_css()
 
         self.show_all()
-
-        # screen = self.get_screen()
-        # max_width = screen.get_width()
-        # self.set_size_request(max_width, -1)
-
         self.modem_window = ModemWindow()
 
 
+    def update_device_label(self):
+        print("Updating device label ...")
+        modem = ModemPass()
+        modem_list_length = callback_function(modem)
+        print("Updating device label after call back...")
+        print("Modem list length:", modem_list_length)
+        self.device_label.set_text(f"{modem_list_length} devices")
+    
+
+    def update_modem_label(self):
+        print("Updating modem label ...")
+        modem = ModemPass()
+        modem_name = callback_function_name(modem)
+        print("Updating device label after call back...")
+        print("Modem list length:", modem_name)
+        self.modem_label.set_text(f"{modem_name} devices")
+    
 
     def on_modem_1_click(self, widget, event):
         print("Modem 1 clicked!")
         main_box = self.get_child()
         main_box.remove(self.modem_window)
-
-        # modem_window = ModemWindow()
         self.modem_window.show_all()
 
     def apply_css(self):
         css_provider = Gtk.CssProvider()
-        css_path = "utils/styles/styles.css"
+        css_path = "gui/utils/styles/styles.css"
 
        # Load the CSS rules into the provider
         css_provider.load_from_path(css_path)
@@ -147,8 +163,10 @@ class DekuLinux(Gtk.Window):
         style_context = self.get_style_context()
         style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+
     def run(self):
         Gtk.main()
+
 
 if __name__ == "__main__":
     app = DekuLinux()
