@@ -15,7 +15,7 @@ from gui.screens.modem.about import AboutWindow
 from gui.utils.widgets.horizontal_line import HorizontalLine
 
 class ModemWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, modem_properties):
         super().__init__(title="Deku Linux App")
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
