@@ -5,7 +5,8 @@ from gui.utils.widgets.horizontal_line import HorizontalLine
 
 from gui.screens.modem.modem_window import ModemWindow
 
-from src.api_callbacks import callback_function, ModemPass, callback_function_name
+# from src.api_callbacks import callback_function, ModemPass, callback_function_name
+from src.api_callbacks import ModemHandler
 
 
 class DekuLinux(Gtk.Window):
@@ -68,11 +69,11 @@ class DekuLinux(Gtk.Window):
         container2.pack_start(modem_container, False, False, 0)
 
         # modem text
-        modem_1 = Gtk.Label()
-        modem_1.set_text("Modem MTN 4.2")
-        modem_1.set_name("modem_label")
-        event_box.add(modem_1)
-        modem_container.pack_start(modem_1, False, False, 0)
+        self.modem_label = Gtk.Label()
+        event_box.add(self.modem_label)
+        modem_container.pack_start(self.modem_label, False, False, 0)
+        self.update_modem_list()
+
 
         modem_2 = Gtk.Label()
         modem_2.set_text("Modem Orange 33")
@@ -110,12 +111,12 @@ class DekuLinux(Gtk.Window):
 
         # device label
         self.device_label = Gtk.Label()
-        self.modem_label = Gtk.Label()
+        # self.modem_label = Gtk.Label()
         center_box.pack_start(self.device_label, False, False, 30)
-        center_box.pack_start(self.modem_label, False, False, 30)
+        # center_box.pack_start(self.modem_label, False, False, 30)
 
         self.update_device_label()
-        self.update_modem_label()
+        # self.update_modem_list()
 
     
         main_box.pack_end(container1, True, True, 0)
@@ -129,22 +130,36 @@ class DekuLinux(Gtk.Window):
 
     def update_device_label(self):
         print("Updating device label ...")
-        modem = ModemPass()
-        modem_list_length = callback_function(modem)
+        modem = ModemHandler()
+        modem.handle_modem_connected()
+        modem_list_length = modem.get_modem_list_length()
         print("Updating device label after call back...")
         print("Modem list length:", modem_list_length)
-        self.device_label.set_text(f"{modem_list_length} devices")
+        self.device_label.set_text(f"{modem_list_length} device(s)")
     
 
-    def update_modem_label(self):
-        print("Updating modem label ...")
-        modem = ModemPass()
-        modem_name = callback_function_name(modem)
-        print("Updating device label after call back...")
-        print("Modem list length:", modem_name)
-        self.modem_label.set_text(f"{modem_name} devices")
-    
+    def update_modem_list(self):
+        print("Updating modem labels...")
+        modem = ModemHandler()
+        modem.handle_modem_connected()
+        modem_names = modem.get_modem_names()
+        print("Updating device labels after callback...")
+        print("Modem list length:", len(modem_names))
 
+        modem_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        container2 = self.modem_label.get_parent().get_parent()
+        # container2.remove(self.modem_label)
+        container2.pack_start(modem_container, False, False, 0)
+
+        for modem_name in modem_names:
+            modem_label = Gtk.Label()
+            modem_label.set_text(modem_name)
+            modem_label.set_name("modem_label")
+            print(f"-{modem_name}")
+            modem_container.pack_start(modem_label, False, False, 0)
+
+        # Call show_all on the container2 to ensure all labels are displayed
+        container2.show_all()
     def on_modem_1_click(self, widget, event):
         print("Modem 1 clicked!")
         main_box = self.get_child()

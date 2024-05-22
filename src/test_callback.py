@@ -7,7 +7,7 @@ class MockModem:
     pass
 
 # Create a MockModem object
-modem = MockModem()
+# modem = MockModem()
 modemd = Modem()
 
 # Call the callback_function with the MockModem object
