@@ -5,15 +5,19 @@ from gi.repository import Gtk, Gdk
 import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from src.api_callbacks import ModemHandler
 
 
 class HomeModemWindow(Gtk.Box):
-    def __init__(self):
+    def __init__(self, modem_properties, modem_name ):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
+        self.modem_handler = ModemHandler()
+        self.modem_handler.handle_modem_connected() #work  on ensuring in handles only clicked modem
+        self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
        
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -34,9 +38,33 @@ class HomeModemWindow(Gtk.Box):
 
 
         # device label
+
+        for properties in self.modem_properties:
+            prop_list = []
+            if "Manufacturer" in properties:
+                # devi.set_text(f"Manufacturer: {properties['Manufacturer']}")
+                manufac = properties['Manufacturer']
+                prop_list.append(manufac)
+            if "Model" in properties:
+                model = properties['Model']
+                prop_list.append(model)
+            if "PrimaryPort" in properties:
+                model = properties['PrimaryPort']
+                prop_list.append(model)
+            
         device_label = Gtk.Label()
-        device_label.set_text("MTN 4.2")
+        device_label.set_text(f"{prop_list[0]} {prop_list[1]} {prop_list[2]}")
         center_box.pack_start(device_label, False, False, 30)
+
+        for properties in self.modem_properties:
+            prop_list = []
+            if "Manufacturer" in properties:
+                # devi.set_text(f"Manufacturer: {properties['Manufacturer']}")
+                manufac = properties['Manufacturer']
+                prop_list.append(manufac)
+            if "Model" in properties:
+                # prop2_label.set_text(f"Model: {properties['Model']}")
+                manufac = properties['Model']
 
 
         # Container 2
@@ -54,52 +82,100 @@ class HomeModemWindow(Gtk.Box):
         grid.set_name("box-info")
         container2.pack_start(grid, True, True, 0)
 
-        # dummy content
-        labels = [
-            "Manufacturer:",
-            "Model:",
-            "Serial Number:",
-            "IMEI:",
-            "ICCID:",
-            "Firmware Version:",
-            "Signal Strength:",
-            "Connection Status:",
-        ]
-        values = [
-            "Dummy Manufacturer",
-            "Dummy Model",
-            "Dummy Serial Number",
-            "Dummy IMEI",
-            "Dummy ICCID",
-            "Dummy Firmware Version",
-            "Dummy Signal Strength",
-            "Dummy Connection Status",
-        ]
+        
+        container_property = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        container_property.set_vexpand(True)
+        container_property.set_homogeneous(False)
+        container_property.set_border_width(10)
+        container_property.set_valign(Gtk.Align.CENTER)
+        container_property.set_halign(Gtk.Align.CENTER)
 
-        # Create column headers
-        header_a = Gtk.Label()
-        header_a.set_text("Box Info")
-        header_a.set_name("box-info-header")
-        grid.attach(header_a, 0, 0, 1, 1)
+        # property_mapping = {
+        #     "Manufacturer": "Manufacturer",
+        #     "Model": "Model",
+        # }
 
-        header_b = Gtk.Label()
-        header_b.set_text("Box Info")
-        header_b.set_name("box-info-header")
-        grid.attach(header_b, 1, 0, 1, 1)
+        # property_labels = {
+        #     property_name: Gtk.Label() for property_name in property_mapping
+        # }
+
+        # property_labels = {}
+        # for property_name in property_mapping:
+        #     label = Gtk.Label()
+        #     property_labels[property_name] = label
+        #     container_property.pack_start(label, False, False, 10)
+        # print(f"property labels {property_labels}")
+        # # print(f"property name {property_name}")
 
 
-        for i in range(len(labels)):
-            label = Gtk.Label()
-            label.set_text(labels[i])
-            label.set_margin_top(10)
-            value = Gtk.Label()
+        # for properties in self.modem_properties:
+        #     for property_name, label in property_labels.items():
+        #         if property_mapping[property_name] in properties:
+        #             value = properties[property_mapping[property_name]]
+        #             label.set_text(f"{property_name}: {value}")
+        #             break
+        #     else:
+        #         label.set_text(f"{property_name}: N/A")
+        # for label in property_labels.values():
+        #     container_property.pack_start(label, False, False, 12)
 
-            value.set_text(values[i])
+        # prop1_label = Gtk.Label()
+        # prop2_label = Gtk.Label()
 
-            grid.attach(label, 0, i+1, 1, 1)
-            grid. attach(value, 1, i+1, 1, 1)
 
-        container1.pack_start(container2, True, True, 0)
+
+        prop1_label = Gtk.Label()
+        prop2_label = Gtk.Label()
+        prop3_label = Gtk.Label()
+        prop4_label = Gtk.Label()
+        prop5_label = Gtk.Label()
+        prop6_label = Gtk.Label()
+        prop7_label = Gtk.Label()
+        prop8_label = Gtk.Label()
+
+
+        for properties in self.modem_properties:
+            if "Manufacturer" in properties:
+                prop1_label.set_text(f"Manufacturer: {properties['Manufacturer']}")
+            if "Model" in properties:
+                prop2_label.set_text(f"Model: {properties['Model']}")
+            if "Imei" in properties:
+                prop3_label.set_text(f"Imei: {properties['Imei']}")
+            else:
+                prop3_label.set_text(f"Imei: N/A")
+            if "OperatorCode" in properties:
+                prop4_label.set_text(f"Operator Code: {properties['OperatorCode']}")
+            if "OperatorName" in properties:
+                prop5_label.set_text(f"Operator Name: {properties['OperatorName']}")
+            if "DeviceIdentifier" in properties:
+                prop6_label.set_text(f"Device Identifier: {properties['DeviceIdentifier']}")
+            if "EquipmentIdentifier" in properties:
+                prop7_label.set_text(f"Equipment Identifier: {properties['EquipmentIdentifier']}")
+            if "PrimaryPort" in properties:
+                prop8_label.set_text(f"Primary Port: {properties['PrimaryPort']}")
+            if "OperatorCode" in properties:
+                prop8_label.set_text(f"Operator Code: {properties['OperatorCode']}")
+            if "OperatorCode" in properties:
+                prop8_label.set_text(f"Operator Code: {properties['OperatorCode']}")
+
+
+            # if "Imei" in properties
+        # prop1_label.set_text(f"Manufacturer: {self.modem_properties['Manufacturer']}")
+        # prop2_label.set_text(f"Model: {self.modem_properties['Model'] for properties in self.modem_properties}")
+
+        container_property.pack_start(prop1_label, False, False, 10)
+        container_property.pack_start(prop2_label, False, False, 10)
+        container_property.pack_start(prop3_label, False, False, 10)
+        container_property.pack_start(prop4_label, False, False, 10)
+        container_property.pack_start(prop5_label, False, False, 10)
+        container_property.pack_start(prop6_label, False, False, 10)
+        container_property.pack_start(prop7_label, False, False, 10)
+        container_property.pack_start(prop8_label, False, False, 10)
+
+
+
+
+        container1.pack_start(container_property, True, True, 0)
 
         # floating action button
         fab_button = Gtk.Button()
@@ -118,6 +194,41 @@ class HomeModemWindow(Gtk.Box):
         self.apply_css()
 
         self.show_all()
+    
+    def listing_properties(self):
+        pass
+
+    def update_modem_list(self):
+        print("Updating modem labels...")
+        # modem = ModemHandler()
+        self.modem_handler.handle_modem_connected()
+        modem_names = self.modem_handler.get_modem_names()
+        print("Updating device labels after callback...")
+        print("Modem list length:", len(modem_names))
+
+        modem_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        container2 = self.modem_label.get_parent().get_parent()
+        # container2.remove(self.modem_label)
+        container2.pack_start(modem_container, False, False, 0)
+
+        for modem_name in modem_names:
+            modem_label = Gtk.Label()
+            modem_label.set_text(modem_name)
+            modem_label.set_name("modem_label")
+            print(f"-{modem_name}")
+
+            event_box = Gtk.EventBox()
+            # event_box.connect("button-press-event", self.on_modem_click(event, modem_name))
+            event_box.connect("button-press-event", lambda widget, event, name=modem_name: self.on_modem_click(widget, event, name))
+            event_box.add(modem_label)  # Add the modem label to the event box
+            modem_container.pack_start(event_box, False, False, 0)
+
+            modem_container.pack_start(modem_label, False, False, 0)
+
+        # Call show_all on the container2 to ensure all labels are displayed
+        container2.show_all()
+
+
 
     def apply_css(self):
         css_provider = Gtk.CssProvider()
