@@ -109,10 +109,12 @@ class Messaging:
 
             logging.debug("# Available received messages - [%d]", 
                     len(available_messages))
+            print(f"Availabel received messaged {len(available_messages)}")
 
             for message_path in available_messages:
 
                 message = SMS(message_path, self)
+                print(message)
 
                 try:
                     self.__add_message__(message)

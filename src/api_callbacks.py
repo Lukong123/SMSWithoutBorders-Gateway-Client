@@ -8,7 +8,7 @@ class ModemHandler:
         self.modem_names = []
         self.modems = {}
         # self.modem = 
-        self.messaging = Messaging(self)
+        self.messaging = None
 
     def handle_modem_connected(self):
         mm = ModemManager()
@@ -20,6 +20,7 @@ class ModemHandler:
                 modem_name = f"{props1} {props2}"
                 self.modem_names.append(modem_name)
                 self.modems[modem_name] = modem
+                self.messaging = Messaging(modem)
         else:
             print("No modems found.")
 
@@ -76,12 +77,6 @@ class ModemHandler:
                 properties['DeviceIdentifier'] = modem.get_modem_property('DeviceIdentifier')
                 properties['EquipmentIdentifier'] = modem.get_modem_property('EquipmentIdentifier')
                 properties['PrimaryPort'] = modem.get_modem_property('PrimaryPort')
-                # properties['Imei'] = modem.get_3gpp_property('Imei')
-                # properties['OperatorCode'] = modem.get_3gpp_property('OperatorCode')
-                # properties['OperatorName'] = modem.get_3gpp_property('OperatorName')
-
-                
-
                 self.modem_names.append(properties['Manufacturer'])
                 self.modems[properties['Manufacturer']] = modem
 
@@ -92,15 +87,9 @@ class ModemHandler:
         return property_list
     
     def get_incoming_messages(self, modem):
-        # msg_handler = Messaging(modem)
-        # msg_handler.clear_stack()
-        # msg_handler.
-        # messages = msg_handler.check_available_messages(self)
-        # messaging = Messaging.mes
-        # message = Messaging.clear_stack(self)
-        # messages = message.check_available_messages
         messages = self.messaging.check_available_messages()
-        print(messages)
+        # messages.
+        print(f"this {messages}")
         
 
 
@@ -123,7 +112,7 @@ modem_names = handler.get_modem_names()
 #     print("No modems found.")
 
 
-first_modem = modem_names[0]
+first_modem = modem_names[1]
 handler.enable_modem(first_modem)
 print("Properties for first modem:", first_modem)
 properties_list = handler.get_modem_properties(first_modem)
