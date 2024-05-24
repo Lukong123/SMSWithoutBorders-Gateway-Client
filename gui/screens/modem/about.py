@@ -5,15 +5,19 @@ from gi.repository import Gtk, Gdk
 import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from src.api_callbacks import ModemHandler
 
 
 class AboutWindow(Gtk.Box):
-    def __init__(self):
+    def __init__(self, modem_properties, modem_name):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
+        self.modem_handler = ModemHandler()
+        self.modem_handler.handle_modem_connected() #work  on ensuring in handles only clicked modem
+        self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
         
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -48,67 +52,61 @@ class AboutWindow(Gtk.Box):
         right_box.pack_end(nav_icon, False, False, 20)
 
 
-        # Container 2
-        container2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        container2.set_vexpand(True)
-        container2.set_homogeneous(False)
-        container2.set_border_width(10)
+        
+        container_property = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        container_property.set_vexpand(True)
+        container_property.set_homogeneous(False)
+        container_property.set_border_width(10)
+        container_property.set_valign(Gtk.Align.CENTER)
+        container_property.set_halign(Gtk.Align.CENTER)
 
-        container2.set_valign(Gtk.Align.CENTER)
-        container2.set_halign(Gtk.Align.CENTER)
-
-        # grid for usb modem box information
-        grid = Gtk.Grid()
-        grid.set_column_spacing(80)
-        grid.set_name("box-info")
-        container2.pack_start(grid, True, True, 0)
-
-        # dummy content
-        labels = [
-            "Manufacturer:",
-            "Model:",
-            "Serial Number:",
-            "IMEI:",
-            "ICCID:",
-            "Firmware Version:",
-            "Signal Strength:",
-            "Connection Status:",
-        ]
-        values = [
-            "Dummy Manufacturer",
-            "Dummy Model",
-            "Dummy Serial Number",
-            "Dummy IMEI",
-            "Dummy ICCID",
-            "Dummy Firmware Version",
-            "Dummy Signal Strength",
-            "Dummy Connection Status",
-        ]
-
-        # Create column headers
-        header_a = Gtk.Label()
-        header_a.set_text("Box Info")
-        header_a.set_name("box-info-header")
-        grid.attach(header_a, 0, 0, 1, 1)
-
-        header_b = Gtk.Label()
-        header_b.set_text("Box Info")
-        header_b.set_name("box-info-header")
-        grid.attach(header_b, 1, 0, 1, 1)
+        prop1_label = Gtk.Label()
+        prop2_label = Gtk.Label()
+        prop3_label = Gtk.Label()
+        prop4_label = Gtk.Label()
+        prop5_label = Gtk.Label()
+        prop6_label = Gtk.Label()
+        prop7_label = Gtk.Label()
+        prop8_label = Gtk.Label()
 
 
-        for i in range(len(labels)):
-            label = Gtk.Label()
-            label.set_text(labels[i])
-            label.set_margin_top(10)
-            value = Gtk.Label()
+        for properties in self.modem_properties:
+            if "Manufacturer" in properties:
+                prop1_label.set_text(f"Manufacturer: {properties['Manufacturer']}")
+            if "Model" in properties:
+                prop2_label.set_text(f"Model: {properties['Model']}")
+            if "Imei" in properties:
+                prop3_label.set_text(f"Imei: {properties['Imei']}")
+            else:
+                prop3_label.set_text(f"Imei: N/A")
+            if "OperatorCode" in properties:
+                prop4_label.set_text(f"Operator Code: {properties['OperatorCode']}")
+            if "OperatorName" in properties:
+                prop5_label.set_text(f"Operator Name: {properties['OperatorName']}")
+            if "DeviceIdentifier" in properties:
+                prop6_label.set_text(f"Device Identifier: {properties['DeviceIdentifier']}")
+            if "EquipmentIdentifier" in properties:
+                prop7_label.set_text(f"Equipment Identifier: {properties['EquipmentIdentifier']}")
+            if "PrimaryPort" in properties:
+                prop8_label.set_text(f"Primary Port: {properties['PrimaryPort']}")
+            if "OperatorCode" in properties:
+                prop8_label.set_text(f"Operator Code: {properties['OperatorCode']}")
+            if "OperatorCode" in properties:
+                prop8_label.set_text(f"Operator Code: {properties['OperatorCode']}")
 
-            value.set_text(values[i])
+        container_property.pack_start(prop1_label, False, False, 10)
+        container_property.pack_start(prop2_label, False, False, 10)
+        container_property.pack_start(prop3_label, False, False, 10)
+        container_property.pack_start(prop4_label, False, False, 10)
+        container_property.pack_start(prop5_label, False, False, 10)
+        container_property.pack_start(prop6_label, False, False, 10)
+        container_property.pack_start(prop7_label, False, False, 10)
+        container_property.pack_start(prop8_label, False, False, 10)
 
-            grid.attach(label, 0, i+1, 1, 1)
-            grid. attach(value, 1, i+1, 1, 1)
 
-        container1.pack_start(container2, True, True, 0)
+
+
+        container1.pack_start(container_property, True, True, 0)
 
         # floating action button
         fab_button = Gtk.Button()

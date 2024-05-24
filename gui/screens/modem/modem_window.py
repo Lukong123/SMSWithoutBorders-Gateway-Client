@@ -218,7 +218,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(export_view, "export")
 
         # about view
-        about_view = AboutWindow()
+        about_view = AboutWindow(self.modem_properties, self.modem_name)
         stack.add_named(about_view, "about")
 
 
