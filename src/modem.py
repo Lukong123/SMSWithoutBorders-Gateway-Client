@@ -92,6 +92,7 @@ class Modem:
         """
         try:
             sim_path = self.get_modem_property("Sim")
+            print(f"sim gotten {sim_path}")
 
         except Exception as error:
             raise error
