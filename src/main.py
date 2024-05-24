@@ -12,13 +12,12 @@ import threading
 import argparse
 import configparser
 
-import inbound as Inbound
-import outbound as Outbound
+import src.inbound as Inbound
+import src.outbound as Outbound
 
-from modem_manager import ModemManager
+from src.modem_manager import ModemManager
 
-import api
-
+import src.api as api
 
 def main_inbound(modem_manager: ModemManager) -> None:
     """

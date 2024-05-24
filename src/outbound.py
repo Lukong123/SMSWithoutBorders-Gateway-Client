@@ -8,9 +8,9 @@ import pika
 from DekuPython import Client
 from DekuPython.std_carrier_lib.helpers import CarrierInformation
 
-from modem_manager import ModemManager
+from src.modem_manager import ModemManager
 
-from modem import Modem
+from src.modem import Modem
 
 
 class RMQModem:

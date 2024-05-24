@@ -9,13 +9,13 @@ import time
 import requests
 from requests.exceptions import HTTPError
 
-from modem_manager import ModemManager
+from src.modem_manager import ModemManager
 
-from modem import Modem
+from src.modem import Modem
 
-from router import Router
+from src.router import Router
 
-from message_store import MessageStore
+from src.message_store import MessageStore
 
 def new_message_handler(message, sim_imsi) -> None:
     """

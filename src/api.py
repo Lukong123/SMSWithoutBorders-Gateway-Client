@@ -21,8 +21,8 @@ import time
 import json
 import configparser
 
-from modem_manager import ModemManager
-from message_store import MessageStore
+from src.modem_manager import ModemManager
+from src.message_store import MessageStore
 
 logging.basicConfig(level='DEBUG')
 
