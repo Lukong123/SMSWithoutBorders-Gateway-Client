@@ -97,22 +97,8 @@ handler = ModemHandler()
 handler.handle_modem_connected()
 
 modem_names = handler.get_modem_names()
-# modem_list = handler.get_modem_list_length()
-# print("Available Modems:")
-# for modem_name in modem_names:
-#     print("- ", modem_name)
-    
 
-# print("Modem List:", modem_list)
-# if modem_names:
-#     first_modem = modem_names[0]
-#     print("Enabling modem:", first_modem)
-#     handler.enable_modem(first_modem)
-# else:
-#     print("No modems found.")
-
-
-first_modem = modem_names[1]
+first_modem = modem_names[0]
 handler.enable_modem(first_modem)
 print("Properties for first modem:", first_modem)
 properties_list = handler.get_modem_properties(first_modem)
@@ -124,10 +110,3 @@ for properties in properties_list:
 msg = handler.get_incoming_messages(first_modem)
 print(f"message check {msg}")
 
-
-# handler = ModemHandler()
-# properties_list = handler.get_properties()
-# print("listing", properties_list)
-
-# for properties in properties_list:
-#     print("Operator Name:", properties['Manufacturer'])
