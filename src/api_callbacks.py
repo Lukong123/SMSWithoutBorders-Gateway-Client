@@ -1,6 +1,7 @@
 from src.modem_manager import ModemManager
 from src.modem import Modem
 from src.messaging import Messaging
+from src.sms import SMS
 
 
 class ModemHandler:
@@ -21,6 +22,12 @@ class ModemHandler:
                 self.modem_names.append(modem_name)
                 self.modems[modem_name] = modem
                 self.messaging = Messaging(modem)
+
+                message_paths = self.messaging.check_available_messages_test()
+
+                for message_path in message_paths:
+                    sms = SMS(message_path=message_path, messaging=self.messaging)
+                    self.incoming_messages_test(sms)
         else:
             print("No modems found.")
 
@@ -90,6 +97,17 @@ class ModemHandler:
         messages = self.messaging.check_available_messages()
         # messages.
         print(f"this {messages}")
+    
+    def incoming_messages_test(self, sms ):
+        text, number, timestamp = sms.new_received_message()
+        print(f"Text: {text}")
+        print(f"Number: {number}")
+        print(f"Timestamp: {timestamp}")
+
+        # message_path = self.messaging.mess
+
+        msg = SMS.new_received_message(self)
+        print(f"msg {msg}")
         
 
 
@@ -109,4 +127,4 @@ for properties in properties_list:
     
 msg = handler.get_incoming_messages(first_modem)
 print(f"message check {msg}")
-
+# handler.incoming_messages_test(first_modem)
