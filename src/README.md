@@ -100,11 +100,11 @@ tail -f src/services/logs/service.log
   ```
   - For outgoing deku messages:
   ```bash
-  python3 src/main.py --log=DEBUG --module=outbound
+  python3 -m src_main --log=DEBUG --module=outbound
   ```
   - To run the incoming (receive and process incoming messages)
   ```bash
-  python3 src/main.py --log=DEBUG --module=inbound
+  python3 -m src_main --log=DEBUG --module=inbound
   ```
 
 <b>Logs - </b>
