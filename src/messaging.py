@@ -109,12 +109,13 @@ class Messaging:
 
             logging.debug("# Available received messages - [%d]", 
                     len(available_messages))
-            print(f"Availabel received messaged {len(available_messages)}")
+            print(f"Available received messaged {len(available_messages)}")
 
             for message_path in available_messages:
 
                 message = SMS(message_path, self)
-                print(message)
+                print(f"worried about message{message}")
+                print(f"printing message path for available messages {message_path}")
 
                 try:
                     self.__add_message__(message)
@@ -125,6 +126,35 @@ class Messaging:
             raise error
 
 
+    def check_available_messages_test(self) -> None:
+        """
+        """
+        logging.debug("checking for available messages")
+
+        self.clear_stack()
+
+        try:
+            available_messages = self.messaging.List()
+
+            logging.debug("# Available received messages - [%d]", 
+                    len(available_messages))
+            print(f"Available received messaged {len(available_messages)}")
+
+            message_paths = []
+            for message_path in available_messages:
+
+                message = SMS(message_path, self)
+                print(f"worried about message{message}")
+                self.__add_message__(message)
+
+                message_paths.append(message_path)
+                print(f"printing message path for available messages {message_path}")
+            return message_paths
+
+                
+        except Exception as error:
+            raise error
+    
     def broadcast_new_message(self, message: SMS) -> None:
         """
         """
