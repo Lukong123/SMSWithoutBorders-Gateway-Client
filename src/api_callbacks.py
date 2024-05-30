@@ -2,6 +2,7 @@ from src.modem_manager import ModemManager
 from src.modem import Modem
 from src.messaging import Messaging
 from src.sms import SMS
+from src.api import get_messages 
 
 
 class ModemHandler:
@@ -10,11 +11,17 @@ class ModemHandler:
         self.modems = {}
         # self.modem = 
         self.messaging = None
+        self.modem_manager = ModemManager()
 
     def handle_modem_connected(self):
         mm = ModemManager()
-        modem_list = mm.list_modems()
+        modem_list = self.modem_manager.list_modems()
+        print(f"modem list:{modem_list}")
         if modem_list:
+            modem_paths = list(modem_list.keys())
+            for modem_path in modem_paths:
+                self.get_gm(modem_path)
+            print(f"modem path {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
                 props2 = modem.get_modem_property('Model')
@@ -23,11 +30,11 @@ class ModemHandler:
                 self.modems[modem_name] = modem
                 self.messaging = Messaging(modem)
 
-                message_paths = self.messaging.check_available_messages_test()
+                # message_paths = self.messaging.check_available_messages_test()
 
-                for message_path in message_paths:
-                    sms = SMS(message_path=message_path, messaging=self.messaging)
-                    self.incoming_messages_test(sms)
+                # for message_path in message_paths:
+                #     sms = SMS(message_path=message_path, messaging=self.messaging)
+                #     self.incoming_messages_test(sms)
         else:
             print("No modems found.")
 
@@ -108,7 +115,10 @@ class ModemHandler:
 
         msg = SMS.new_received_message(self)
         print(f"msg {msg}")
-        
+    
+    def get_gm(self, modem_path):
+        gm_msg = get_messages(modem_path, self.modem_manager)
+        print(f"gm msg {gm_msg}")
 
 
 handler = ModemHandler()
@@ -128,3 +138,4 @@ for properties in properties_list:
 msg = handler.get_incoming_messages(first_modem)
 print(f"message check {msg}")
 # handler.incoming_messages_test(first_modem)
+print(f"antoerh {handler.get_gm(first_modem)}")

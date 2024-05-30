@@ -242,7 +242,7 @@ def delete_sms(message_id) -> int:
     return row_count
 
 
-def get_messages(modem_path, fetch_type=None) -> list:
+def get_messages(modem_path, modem_manager, fetch_type=None) -> list:
     """
     Cannot talk directly with the modem because messages get removed from the 
     modem's message stack. 
