@@ -20,7 +20,11 @@ class ModemHandler:
         if modem_list:
             modem_paths = list(modem_list.keys())
             for modem_path in modem_paths:
+                print(f" some where up {modem_path}")
                 self.get_get_incoming_message(modem_path)
+                sddd = self.get_get_incoming_message(modem_path)
+                print(f"some where down {sddd}")
+
             print(f"modem path {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
@@ -138,4 +142,4 @@ for properties in properties_list:
 msg = handler.get_incoming_messages(first_modem)
 print(f"message check {msg}")
 # handler.incoming_messages_test(first_modem)
-print(f"antoerh {handler.get_gm(first_modem)}")
+print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
