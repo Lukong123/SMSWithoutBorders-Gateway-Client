@@ -91,3 +91,10 @@ margin-left: 10px;
 #test{
     color: black;
 }
+
+
+/* message forwarding */
+#message-label-fwd {
+    font-size: 25px;
+
+}

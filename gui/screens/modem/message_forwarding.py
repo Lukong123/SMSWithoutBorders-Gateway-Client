@@ -55,70 +55,18 @@ class MessageForwardingWindow(Gtk.Box):
         container_main.set_size_request(int(width_get * 0.4), -1)
         # container_main.set_size_request(500, -1)
         
-        container_main.set_margin_top(10)
-        container_main.set_name("container_main_msg")
+        container_main.set_margin_top(300)
         container1.pack_start(container_main, False, False, 0)
 
-        row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        row1.set_homogeneous(False)
-        row1.set_name("row1") 
-        row1.set_margin_top(10)
-        container_main.pack_start(row1, False, False, 0)
-
-        left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        left_box.set_homogeneous(True)
-        row1.pack_start(left_box, False, False, 0)
-
-        number_label = Gtk.Label()
-        number_label.set_text("Phone Number")
-        number_label.set_name("number-label")
-        number_label.set_margin_start(0)
-        left_box.pack_start(number_label, False, False, 20)
-
-        right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        right_box.set_homogeneous(True)
-        row1.pack_end(right_box, False, False, 0)
-
-        time_label = Gtk.Label()
-        time_label.set_text("06:08 pm")
-        time_label.set_name("time-label") 
-        right_box.pack_end(time_label, False, False, 20)
-
-        row2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        row2.set_homogeneous(False)
-        row2.set_name("row2") 
-        container_main.pack_start(row2, False, False, 0)
-
-        left_box2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        left_box2.set_homogeneous(True)
-        row2.pack_start(left_box2, False, False, 0)
+        center_container = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing= 60)
+        center_container.set_halign(Gtk.Align.CENTER)
+        container_main.pack_start(center_container, False, False, 0)
 
         message_label = Gtk.Label()
-        message_label.set_text("Message...")
-        message_label.set_name("message-label")
-        left_box2.pack_start(message_label, False, False, 20)
+        message_label.set_text("No routed message to show!")
+        message_label.set_name("message-label-fwd")
+        center_container.pack_start(message_label, False, False, 20)
 
-        row3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        row3.set_homogeneous(False)
-        row3.set_name("row3") 
-        row3.set_margin_bottom(10)
-        container_main.pack_start(row3, True, False, 0)
-
-        left_box3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        left_box3.set_homogeneous(True)
-        row3.pack_start(left_box3, False, False, 0)
-
-        delete_icon = Gtk.Image.new_from_icon_name("edit-delete", Gtk.IconSize.BUTTON)
-        left_box3.pack_start(delete_icon, False, False, 20)
-
-        right_box_3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        right_box_3.set_homogeneous(True)
-        row3.pack_end(right_box_3, False, False, 0)
-
-        reply_label = Gtk.Label()
-        reply_label.set_text("Reply")
-        reply_label.set_name("time-label") 
-        right_box_3.pack_end(reply_label, False, False, 20)
 
         # floating action button
         fab_button = Gtk.Button()
