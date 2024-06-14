@@ -20,7 +20,7 @@ class ModemHandler:
         if modem_list:
             modem_paths = list(modem_list.keys())
             for modem_path in modem_paths:
-                self.get_gm(modem_path)
+                self.get_get_incoming_message(modem_path)
             print(f"modem path {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
@@ -116,7 +116,7 @@ class ModemHandler:
         msg = SMS.new_received_message(self)
         print(f"msg {msg}")
     
-    def get_gm(self, modem_path):
+    def get_get_incoming_message(self, modem_path):
         gm_msg = get_messages(modem_path, self.modem_manager)
         print(f"gm msg {gm_msg}")
 
