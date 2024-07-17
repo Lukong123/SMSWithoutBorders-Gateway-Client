@@ -19,11 +19,11 @@ class ModemHandler:
         print(f"modem list:{modem_list}")
         if modem_list:
             modem_paths = list(modem_list.keys())
-            for modem_path in modem_paths:
-                print(f" some where up {modem_path}")
-                self.get_get_incoming_message(modem_path)
-                sddd = self.get_get_incoming_message(modem_path)
-                print(f"some where down {sddd}")
+            # for modem_path in modem_paths:
+            #     print(f" some where up {modem_path}")
+            #     self.get_get_incoming_message(modem_path)
+            #     sddd = self.get_get_incoming_message(modem_path)
+            #     print(f"some where down {sddd}")
 
             print(f"modem path {modem_paths}")
             for modem in modem_list.values():
@@ -120,26 +120,26 @@ class ModemHandler:
         msg = SMS.new_received_message(self)
         print(f"msg {msg}")
     
-    def get_get_incoming_message(self, modem_path):
-        gm_msg = get_messages(modem_path, self.modem_manager)
-        print(f"gm msg {gm_msg}")
+    # def get_get_incoming_message(self, modem_path):
+    #     gm_msg = get_messages(modem_path, self.modem_manager)
+    #     print(f"gm msg {gm_msg}")
 
 
-handler = ModemHandler()
-handler.handle_modem_connected()
+# handler = ModemHandler()
+# handler.handle_modem_connected()
 
-modem_names = handler.get_modem_names()
+# modem_names = handler.get_modem_names()
 
-first_modem = modem_names[0]
-handler.enable_modem(first_modem)
-print("Properties for first modem:", first_modem)
-properties_list = handler.get_modem_properties(first_modem)
-for properties in properties_list:
-    print("Manufac:", properties['Imei'],first_modem)
-    print("Manufac:", properties['OperatorCode'],first_modem)
-    print("Manufac:", properties['OperatorName'],first_modem)
+# first_modem = modem_names[0]
+# handler.enable_modem(first_modem)
+# print("Properties for first modem:", first_modem)
+# properties_list = handler.get_modem_properties(first_modem)
+# for properties in properties_list:
+#     print("Manufac:", properties['Imei'],first_modem)
+#     print("Manufac:", properties['OperatorCode'],first_modem)
+#     print("Manufac:", properties['OperatorName'],first_modem)
     
-msg = handler.get_incoming_messages(first_modem)
-print(f"message check {msg}")
-# handler.incoming_messages_test(first_modem)
-print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
+# msg = handler.get_incoming_messages(first_modem)
+# print(f"message check {msg}")
+# # handler.incoming_messages_test(first_modem)
+# # print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
