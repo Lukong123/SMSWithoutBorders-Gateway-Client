@@ -1,8 +1,11 @@
+import logging
+
 from src.modem_manager import ModemManager
 from src.modem import Modem
 from src.messaging import Messaging
 from src.sms import SMS
 from src.api import get_messages 
+from src.inbound import new_message_handler
 
 
 class ModemHandler:
@@ -13,15 +16,16 @@ class ModemHandler:
         self.messaging = None
         self.modem_manager = ModemManager()
 
+
     def handle_modem_connected(self):
         mm = ModemManager()
         modem_list = self.modem_manager.list_modems()
         print(f"modem list:{modem_list}")
         if modem_list:
             modem_paths = list(modem_list.keys())
-            # for modem_path in modem_paths:
-            #     print(f" some where up {modem_path}")
-            #     self.get_get_incoming_message(modem_path)
+            for modem_path in modem_paths:
+                print(f" some where up {modem_path}")
+                self.get_get_incoming_message(modem_path)
             #     sddd = self.get_get_incoming_message(modem_path)
             #     print(f"some where down {sddd}")
 
@@ -109,37 +113,54 @@ class ModemHandler:
         # messages.
         print(f"this {messages}")
     
-    def incoming_messages_test(self, sms ):
-        text, number, timestamp = sms.new_received_message()
-        print(f"Text: {text}")
-        print(f"Number: {number}")
-        print(f"Timestamp: {timestamp}")
+    # def incoming_messages_test(self, sms ):
+    #     text, number, timestamp = sms.new_received_message()
+    #     print(f"Text: {text}")
+    #     print(f"Number: {number}")
+    #     print(f"Timestamp: {timestamp}")
 
-        # message_path = self.messaging.mess
+    #     # message_path = self.messaging.mess
 
-        msg = SMS.new_received_message(self)
-        print(f"msg {msg}")
+    #     msg = SMS.new_received_message(self)
+    #     print(f"msg {msg}")
     
-    # def get_get_incoming_message(self, modem_path):
-    #     gm_msg = get_messages(modem_path, self.modem_manager)
-    #     print(f"gm msg {gm_msg}")
+    def miko_incoming(self):
+        print("working in miko")
+        text = SMS.new_received_message(self)
+        number = SMS.new_received_message(self)
+        timestamp = SMS.new_received_message(self)
+        logging.debug("\n\ttext:%s\n\tnumber:%s\n\ttimestamp:%s", text, number, timestamp)
 
 
-# handler = ModemHandler()
-# handler.handle_modem_connected()
 
-# modem_names = handler.get_modem_names()
 
-# first_modem = modem_names[0]
-# handler.enable_modem(first_modem)
-# print("Properties for first modem:", first_modem)
-# properties_list = handler.get_modem_properties(first_modem)
-# for properties in properties_list:
-#     print("Manufac:", properties['Imei'],first_modem)
-#     print("Manufac:", properties['OperatorCode'],first_modem)
-#     print("Manufac:", properties['OperatorName'],first_modem)
+        print(f"miko fn text: {text}")
+
+
+
+    def get_get_incoming_message(self, modem_path):
+        print(f"testing the get sim issue {modem_path}")
+        gm_msg = get_messages(modem_path, self.modem_manager)
+        print(f"gm msg {gm_msg}")
+
+
+handler = ModemHandler()
+handler.handle_modem_connected()
+
+modem_names = handler.get_modem_names()
+
+first_modem = modem_names[0]
+handler.enable_modem(first_modem)
+print("Properties for first modem:", first_modem)
+properties_list = handler.get_modem_properties(first_modem)
+for properties in properties_list:
+    print("Manufac:", properties['Imei'],first_modem)
+    # print("Manufac:", properties['OperatorCode'],first_modem)
+    # print("Manufac:", properties['OperatorName'],first_modem)
     
-# msg = handler.get_incoming_messages(first_modem)
-# print(f"message check {msg}")
-# # handler.incoming_messages_test(first_modem)
-# # print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
+msg = handler.get_incoming_messages(first_modem)
+print(f"message check {msg}")
+# miko_test = handler.miko_incoming()
+print(f"miko text: {ModemHandler().miko_incoming()}")
+# handler.incoming_messages_test(first_modem)
+print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
