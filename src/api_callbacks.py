@@ -25,7 +25,7 @@ class ModemHandler:
             modem_paths = list(modem_list.keys())
             for modem_path in modem_paths:
                 print(f" some where up {modem_path}")
-                self.get_get_incoming_message(modem_path)
+                self.get_get_incoming_message(modem_path) 
             #     sddd = self.get_get_incoming_message(modem_path)
             #     print(f"some where down {sddd}")
 
@@ -113,17 +113,7 @@ class ModemHandler:
         # messages.
         print(f"this {messages}")
     
-    # def incoming_messages_test(self, sms ):
-    #     text, number, timestamp = sms.new_received_message()
-    #     print(f"Text: {text}")
-    #     print(f"Number: {number}")
-    #     print(f"Timestamp: {timestamp}")
 
-    #     # message_path = self.messaging.mess
-
-    #     msg = SMS.new_received_message(self)
-    #     print(f"msg {msg}")
-    
     def miko_incoming(self):
         print("working in miko")
         text = SMS.new_received_message(self)
@@ -131,15 +121,13 @@ class ModemHandler:
         timestamp = SMS.new_received_message(self)
         logging.debug("\n\ttext:%s\n\tnumber:%s\n\ttimestamp:%s", text, number, timestamp)
 
-
-
-
         print(f"miko fn text: {text}")
 
 
 
     def get_get_incoming_message(self, modem_path):
         print(f"testing the get sim issue {modem_path}")
+        print("troubleshoot",self.modem_manager)
         gm_msg = get_messages(modem_path, self.modem_manager)
         print(f"gm msg {gm_msg}")
 
@@ -158,9 +146,3 @@ for properties in properties_list:
     # print("Manufac:", properties['OperatorCode'],first_modem)
     # print("Manufac:", properties['OperatorName'],first_modem)
     
-msg = handler.get_incoming_messages(first_modem)
-print(f"message check {msg}")
-# miko_test = handler.miko_incoming()
-print(f"miko text: {ModemHandler().miko_incoming()}")
-# handler.incoming_messages_test(first_modem)
-print(f"antoerh {handler.get_get_incoming_message(first_modem)}")
