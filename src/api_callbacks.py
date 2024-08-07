@@ -12,7 +12,6 @@ class ModemHandler:
     def __init__(self):
         self.modem_names = []
         self.modems = {}
-        # self.modem = 
         self.messaging = None
         self.modem_manager = ModemManager()
 
@@ -26,9 +25,6 @@ class ModemHandler:
             for modem_path in modem_paths:
                 print(f" some where up {modem_path}")
                 self.get_get_incoming_message(modem_path) 
-            #     sddd = self.get_get_incoming_message(modem_path)
-            #     print(f"some where down {sddd}")
-
             print(f"modem path {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
@@ -37,12 +33,6 @@ class ModemHandler:
                 self.modem_names.append(modem_name)
                 self.modems[modem_name] = modem
                 self.messaging = Messaging(modem)
-
-                # message_paths = self.messaging.check_available_messages_test()
-
-                # for message_path in message_paths:
-                #     sms = SMS(message_path=message_path, messaging=self.messaging)
-                #     self.incoming_messages_test(sms)
         else:
             print("No modems found.")
 
@@ -54,7 +44,6 @@ class ModemHandler:
         return len(modem_list)
     
     def enable_modem(self, modem_name):
-        # modem_name = modem_name
         if modem_name in self.modems:
             print(f"testing just after if {self.modems}")
             modem = self.modems[modem_name]
@@ -67,7 +56,6 @@ class ModemHandler:
             print(f"Modem {modem_name} not found")
     
     def get_modem_properties(self, modem_name):
-        # modem_name = modem_name
         properties_list = []
         if self.enable_modem(modem_name):
             properties = {}
@@ -107,12 +95,6 @@ class ModemHandler:
             print("No modems found.")
 
         return property_list
-    
-    def get_incoming_messages(self, modem):
-        messages = self.messaging.check_available_messages()
-        # messages.
-        print(f"this {messages}")
-    
 
     def miko_incoming(self):
         print("working in miko")
@@ -123,13 +105,12 @@ class ModemHandler:
 
         print(f"miko fn text: {text}")
 
-
-
     def get_get_incoming_message(self, modem_path):
         print(f"testing the get sim issue {modem_path}")
         print("troubleshoot",self.modem_manager)
         gm_msg = get_messages(modem_path, self.modem_manager)
         print(f"gm msg {gm_msg}")
+        return gm_msg
 
 
 handler = ModemHandler()
@@ -139,10 +120,9 @@ modem_names = handler.get_modem_names()
 
 first_modem = modem_names[0]
 handler.enable_modem(first_modem)
-print("Properties for first modem:", first_modem)
+# print("Properties for first modem:", handler.get_modem_properties(first_modem))
 properties_list = handler.get_modem_properties(first_modem)
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
-    # print("Manufac:", properties['OperatorCode'],first_modem)
-    # print("Manufac:", properties['OperatorName'],first_modem)
+   
     

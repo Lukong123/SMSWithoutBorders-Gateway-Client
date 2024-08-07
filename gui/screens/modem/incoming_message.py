@@ -5,15 +5,19 @@ from gi.repository import Gtk, Gdk
 import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from src.api_callbacks import ModemHandler
 
 
 class IncomingMessageWindow(Gtk.Box):
-    def __init__(self):
+    def __init__(self, incoming_messages, modem_name):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
+        self.modem_handler= ModemHandler()
+        self.modem_handler.handle_modem_connected()
+        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_name)
         
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -119,6 +123,20 @@ class IncomingMessageWindow(Gtk.Box):
         reply_label.set_text("Reply")
         reply_label.set_name("time-label") 
         right_box_3.pack_end(reply_label, False, False, 20)
+
+        # Testing something
+        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+
+        for message in self.incoming_messages:
+            container_test = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+            container1.pack_end(container_test, False, False, 20)
+            for k,v in message.items():
+                text_label = Gtk.Label()
+                container_test.pack_start(text_label)
+                tmsg= {v}
+                text_label.set_text(tmsg)
+
+
 
         # floating action button
         fab_button = Gtk.Button()
