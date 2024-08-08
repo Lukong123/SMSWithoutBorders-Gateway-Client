@@ -26,7 +26,7 @@ class ModemWindow(Gtk.Window):
         
         self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
         self.modem_name = modem_name
-        self.incoming_messages = self.modem_handler.get_get_incoming_message()
+        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path='/org/freedesktop/ModemManager1/Modem/0')
         
 
         # Create the main container

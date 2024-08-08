@@ -17,7 +17,7 @@ class IncomingMessageWindow(Gtk.Box):
         self.set_border_width(5)
         self.modem_handler= ModemHandler()
         self.modem_handler.handle_modem_connected()
-        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_name)
+        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path='/org/freedesktop/ModemManager1/Modem/0')
         
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -132,9 +132,12 @@ class IncomingMessageWindow(Gtk.Box):
             container1.pack_end(container_test, False, False, 20)
             for k,v in message.items():
                 text_label = Gtk.Label()
-                container_test.pack_start(text_label)
-                tmsg= {v}
-                text_label.set_text(tmsg)
+                container_test.pack_start(text_label, False, False, 20)
+                tmsg= {str(v)}
+                print(f"container test, {tmsg}")
+                tt = ', '.join(tmsg)
+                tm = str(tt)
+                text_label.set_text(tm)
 
 
 
