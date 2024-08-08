@@ -35,6 +35,8 @@ class HomeModemWindow(Gtk.Box):
         # Horizontal line widget
         line = HorizontalLine()
         container1.pack_start(line, False, False, 0)
+        container_prop = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
+        container1.pack_start(container_prop, False, False, 0)
 
 
         # device label
@@ -81,6 +83,7 @@ class HomeModemWindow(Gtk.Box):
         grid.set_column_spacing(80)
         grid.set_name("box-info")
         container2.pack_start(grid, True, True, 0)
+        container_property1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
         
         container_property = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -89,40 +92,6 @@ class HomeModemWindow(Gtk.Box):
         container_property.set_border_width(10)
         container_property.set_valign(Gtk.Align.CENTER)
         container_property.set_halign(Gtk.Align.CENTER)
-
-        # property_mapping = {
-        #     "Manufacturer": "Manufacturer",
-        #     "Model": "Model",
-        # }
-
-        # property_labels = {
-        #     property_name: Gtk.Label() for property_name in property_mapping
-        # }
-
-        # property_labels = {}
-        # for property_name in property_mapping:
-        #     label = Gtk.Label()
-        #     property_labels[property_name] = label
-        #     container_property.pack_start(label, False, False, 10)
-        # print(f"property labels {property_labels}")
-        # # print(f"property name {property_name}")
-
-
-        # for properties in self.modem_properties:
-        #     for property_name, label in property_labels.items():
-        #         if property_mapping[property_name] in properties:
-        #             value = properties[property_mapping[property_name]]
-        #             label.set_text(f"{property_name}: {value}")
-        #             break
-        #     else:
-        #         label.set_text(f"{property_name}: N/A")
-        # for label in property_labels.values():
-        #     container_property.pack_start(label, False, False, 12)
-
-        # prop1_label = Gtk.Label()
-        # prop2_label = Gtk.Label()
-
-
 
         prop1_label = Gtk.Label()
         prop2_label = Gtk.Label()
@@ -159,21 +128,14 @@ class HomeModemWindow(Gtk.Box):
                 prop8_label.set_text(f"Operator Code: {properties['OperatorCode']}")
 
 
-            # if "Imei" in properties
-        # prop1_label.set_text(f"Manufacturer: {self.modem_properties['Manufacturer']}")
-        # prop2_label.set_text(f"Model: {self.modem_properties['Model'] for properties in self.modem_properties}")
-
-        container_property.pack_start(prop1_label, False, False, 10)
-        container_property.pack_start(prop2_label, False, False, 10)
-        container_property.pack_start(prop3_label, False, False, 10)
-        container_property.pack_start(prop4_label, False, False, 10)
-        container_property.pack_start(prop5_label, False, False, 10)
-        container_property.pack_start(prop6_label, False, False, 10)
-        container_property.pack_start(prop7_label, False, False, 10)
-        container_property.pack_start(prop8_label, False, False, 10)
-
-
-
+        container_prop.pack_start(prop1_label, False, False, 10)
+        container_prop.pack_start(prop2_label, False, False, 5)
+        container_prop.pack_start(prop3_label, False, False, 5)
+        container_prop.pack_start(prop4_label, False, False, 5)
+        container_prop.pack_start(prop5_label, False, False, 5)
+        container_prop.pack_start(prop6_label, False, False, 5)
+        container_prop.pack_start(prop7_label, False, False, 5)
+        container_prop.pack_start(prop8_label, False, False, 5)
 
         container1.pack_start(container_property, True, True, 0)
 
