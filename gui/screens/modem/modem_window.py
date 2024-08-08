@@ -17,7 +17,7 @@ from gui.screens.modem.about import AboutWindow
 from gui.utils.widgets.horizontal_line import HorizontalLine
 
 class ModemWindow(Gtk.Window):
-    def __init__(self, modem_properties, modem_name):
+    def __init__(self, modem_properties, modem_name, modem_path):
         super().__init__(title="Deku Linux App")
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
@@ -26,7 +26,9 @@ class ModemWindow(Gtk.Window):
         
         self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
         self.modem_name = modem_name
-        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path='/org/freedesktop/ModemManager1/Modem/0')
+        self.modem_path = modem_path
+
+        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
         
 
         # Create the main container
@@ -196,7 +198,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(send_view, "send")
 
         # incoming view
-        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name)
+        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_path)
         stack.add_named(incoming_view, "incoming")
 
         # outgoing view
