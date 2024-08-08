@@ -53,11 +53,10 @@ class AboutWindow(Gtk.Box):
 
 
         
-        container_property = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        container_property = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=30)
         container_property.set_vexpand(True)
         container_property.set_homogeneous(False)
         container_property.set_border_width(10)
-        container_property.set_valign(Gtk.Align.CENTER)
         container_property.set_halign(Gtk.Align.CENTER)
 
         prop1_label = Gtk.Label()
