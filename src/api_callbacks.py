@@ -12,6 +12,7 @@ class ModemHandler:
     def __init__(self):
         self.modem_names = []
         self.modems = {}
+        self.modem_paths = []
         self.messaging = None
         self.modem_manager = ModemManager()
 
@@ -25,6 +26,7 @@ class ModemHandler:
             for modem_path in modem_paths:
                 print(f" some where up {modem_path}")
                 self.get_get_incoming_message(modem_path) 
+                self.modem_paths.append(modem_path)
             print(f"modem path {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
@@ -38,6 +40,8 @@ class ModemHandler:
 
     def get_modem_names(self):
         return self.modem_names
+    def get_modem_path(self):
+        return self.modem_paths
     def get_modem_list_length(self):
         mm = ModemManager()
         modem_list = mm.list_modems()
@@ -125,4 +129,5 @@ properties_list = handler.get_modem_properties(first_modem)
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
    
-    
+
+print(f"testing modem path{handler.get_modem_path}")
