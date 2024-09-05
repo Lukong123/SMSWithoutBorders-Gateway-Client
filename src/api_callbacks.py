@@ -105,21 +105,13 @@ class ModemHandler:
 
         return property_list
 
-    def miko_incoming(self):
-        print("working in miko")
-        text = SMS.new_received_message(self)
-        number = SMS.new_received_message(self)
-        timestamp = SMS.new_received_message(self)
-        logging.debug("\n\ttext:%s\n\tnumber:%s\n\ttimestamp:%s", text, number, timestamp)
-
-        print(f"miko fn text: {text}")
 
     def get_get_incoming_message(self, modem_path):
-        print(f"testing the get sim issue {modem_path}")
-        print("troubleshoot",self.modem_manager)
         gm_msg = get_messages(modem_path, self.modem_manager)
-        print(f"gm msg {gm_msg}")
+        print(f"your incoming msg {gm_msg}")
         return gm_msg
+    
+    
 
 
 handler = ModemHandler()
