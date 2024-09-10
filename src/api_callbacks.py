@@ -4,7 +4,7 @@ from src.modem_manager import ModemManager
 from src.modem import Modem
 from src.messaging import Messaging
 from src.sms import SMS
-from src.api import get_messages 
+from src.api import get_messages, send_sms
 from src.inbound import new_message_handler
 
 
@@ -111,7 +111,26 @@ class ModemHandler:
         print(f"your incoming msg {gm_msg}")
         return gm_msg
     
-    
+    def send_messages(self, number, text ):
+        try:
+            print("trying send messages")
+            msg = self.messaging.send_sms(self, number, text)
+            return msg
+        except Exception as error:
+            print(error)
+            print("some error of the try for send messages")
+
+    # def sending_api(self, modem_path, text, number ):
+    #     try:
+    #         print("api sending try")
+    #         modem_handler = ModemHandler() 
+    #         api_send = send_sms(modem_path, text, number, modem_manager=modem_handler)
+    #         print(f"api send return type of a thing {api_send}")
+    #     except Exception as error:
+    #         print(error)
+    #         print("api's own error")
+
+
 
 
 handler = ModemHandler()
@@ -123,6 +142,9 @@ first_modem = modem_names[0]
 handler.enable_modem(first_modem)
 # print("Properties for first modem:", handler.get_modem_properties(first_modem))
 properties_list = handler.get_modem_properties(first_modem)
+# test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
+
+test_send = handler.send_messages("687022472","Testing" )
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
    
