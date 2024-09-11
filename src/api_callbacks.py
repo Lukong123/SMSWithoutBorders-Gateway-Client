@@ -111,10 +111,9 @@ class ModemHandler:
         print(f"your incoming msg {gm_msg}")
         return gm_msg
     
-    def send_messages(self, number, text ):
+    def send_messages(self,  text: str, number: str, ):
         try:
-            print("trying send messages")
-            msg = self.messaging.send_sms(self, number, text)
+            msg = self.messaging.send_sms( text, number)
             return msg
         except Exception as error:
             print(error)
@@ -144,7 +143,7 @@ handler.enable_modem(first_modem)
 properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 
-test_send = handler.send_messages("687022472","Testing" )
+test_send = handler.send_messages(  "Testing again 3","687022472")
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
    
