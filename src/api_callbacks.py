@@ -143,7 +143,7 @@ handler.enable_modem(first_modem)
 properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 
-test_send = handler.send_messages(  "Testing again 3","687022472")
+# test_send = handler.send_messages(  "Testing again 3","687022472")
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
    
