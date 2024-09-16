@@ -150,7 +150,7 @@ class DekuLinux(Gtk.Window):
         self.modem_handler.handle_modem_connected()
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
-        modem_window = ModemWindow(modem_properties, modem_name, modem_path)
+        modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler)
         modem_window.show_all()
 
     def apply_css(self):

@@ -17,11 +17,12 @@ from gui.screens.modem.about import AboutWindow
 from gui.utils.widgets.horizontal_line import HorizontalLine
 
 class ModemWindow(Gtk.Window):
-    def __init__(self, modem_properties, modem_name, modem_path):
+    def __init__(self, modem_properties, modem_name, modem_path, modem_handler):
         super().__init__(title="Deku Linux App")
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
-        self.modem_handler = ModemHandler()
+        # self.modem_handler = ModemHandler()
+        self.modem_handler = modem_handler
         self.modem_handler.handle_modem_connected()
         
         self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
@@ -190,15 +191,15 @@ class ModemWindow(Gtk.Window):
     def initialize_views(self, stack):
 
         # home modem view
-        home_modem_view = HomeModemWindow(self.modem_properties, self.modem_name)
+        home_modem_view = HomeModemWindow(self.modem_properties, self.modem_name, self.modem_handler)
         stack.add_named(home_modem_view, "home_modem")
         
         # send view
-        send_view = SendMessageWindow()
+        send_view = SendMessageWindow(self.modem_handler)
         stack.add_named(send_view, "send")
 
         # incoming view
-        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_path)
+        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_path, self.modem_handler)
         stack.add_named(incoming_view, "incoming")
 
         # outgoing view
@@ -222,7 +223,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(export_view, "export")
 
         # about view
-        about_view = AboutWindow(self.modem_properties, self.modem_name)
+        about_view = AboutWindow(self.modem_properties, self.modem_name, self.modem_handler)
         stack.add_named(about_view, "about")
 
 

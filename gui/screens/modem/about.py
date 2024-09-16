@@ -9,13 +9,14 @@ from src.api_callbacks import ModemHandler
 
 
 class AboutWindow(Gtk.Box):
-    def __init__(self, modem_properties, modem_name):
+    def __init__(self, modem_properties, modem_name, modem_handler):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
-        self.modem_handler = ModemHandler()
+        # self.modem_handler = ModemHandler()
+        self.modem_handler = modem_handler
         self.modem_handler.handle_modem_connected() #work  on ensuring in handles only clicked modem
         self.modem_properties = self.modem_handler.get_modem_properties(modem_name)
         
