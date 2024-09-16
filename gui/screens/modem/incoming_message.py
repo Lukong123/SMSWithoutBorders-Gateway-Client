@@ -5,6 +5,7 @@ from gi.repository import Gtk, Gdk
 import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from gui.screens.modem.send_message import SendMessageWindow
 from src.api_callbacks import ModemHandler
 
 
@@ -57,21 +58,22 @@ class IncomingMessageWindow(Gtk.Box):
 
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         container_main.set_halign(Gtk.Align.CENTER)
+        container_main.set_margin_top(10)
         screen = Gdk.Screen.get_default()
         width_get = screen.get_width()
         container_main.set_size_request(int(width_get * 0.4), -1)
         
         for message in self.incoming_messages:
-            container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-            container_main.set_margin_top(10)
-            container_main.set_name("container_main_msg")
-            container1.pack_start(container_main, False, False, 0)
+            message_box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
+            message_box.set_margin_top(10)
+            message_box.set_name("container_main_msg")
+            container_main.pack_start(message_box, False, False, 0)
 
             row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             row1.set_homogeneous(False)
             row1.set_name("row1") 
             row1.set_margin_top(10)
-            container_main.pack_start(row1, False, False, 0)
+            message_box.pack_start(row1, False, False, 0)
 
             left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             left_box.set_homogeneous(True)
@@ -100,7 +102,7 @@ class IncomingMessageWindow(Gtk.Box):
             row2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             row2.set_homogeneous(False)
             row2.set_name("row2") 
-            container_main.pack_start(row2, False, False, 0)
+            message_box.pack_start(row2, False, False, 0)
 
             left_box2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             left_box2.set_homogeneous(True)
@@ -115,7 +117,7 @@ class IncomingMessageWindow(Gtk.Box):
             row3.set_homogeneous(False)
             row3.set_name("row3") 
             row3.set_margin_bottom(10)
-            container_main.pack_start(row3, True, False, 0)
+            message_box.pack_start(row3, True, False, 0)
 
             left_box3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             left_box3.set_homogeneous(True)
@@ -132,23 +134,11 @@ class IncomingMessageWindow(Gtk.Box):
             reply_label.set_text("Reply")
             reply_label.set_name("time-label") 
             right_box_3.pack_end(reply_label, False, False, 20)
+        
 
-        # Testing something
-        # container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-
-        # for message in self.incoming_messages:
-        #     container_test = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        #     container1.pack_end(container_test, False, False, 20)
-        #     for k,v in message.items():
-        #         text_label = Gtk.Label()
-        #         container_test.pack_start(text_label, False, False, 20)
-        #         tmsg= {str(v)}
-        #         print(f"container test, {tmsg}")
-        #         tt = ', '.join(tmsg)
-        #         tm = str(tt)
-        #         text_label.set_text(tm)
-
-
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.add(container_main)
+        self.pack_start(scrolledwindow, True, True, 0)
 
         # floating action button
         fab_button = Gtk.Button()
@@ -159,9 +149,12 @@ class IncomingMessageWindow(Gtk.Box):
         fab_button.add(message_icon)
         fab_button.set_size_request(50, 50)
         alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
-        alignment.set_padding(0, 50, 0, 50) 
+        alignment.set_padding(0, 0, 10, 10) 
         alignment.add(fab_button)
         container1.pack_end(alignment, False, False, 0)
+
+# Add the aligned floating action button to the main container
+        # self.pack_end(alignment, False, False, 0)
 
         # Apply custom CSS styling
         self.apply_css()
@@ -187,6 +180,6 @@ class IncomingMessageWindow(Gtk.Box):
     def run(self):
         Gtk.main()
 
-if __name__ == "__main__":
-    app = ModemWindow()
-    app.run()
+# if __name__ == "__main__":
+#     app = ModemWindow()
+#     app.run()
