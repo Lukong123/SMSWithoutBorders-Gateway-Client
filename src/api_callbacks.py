@@ -1,4 +1,5 @@
 import logging
+import time
 
 from src.modem_manager import ModemManager
 from src.modem import Modem
@@ -6,6 +7,7 @@ from src.messaging import Messaging
 from src.sms import SMS
 from src.api import get_messages, send_sms
 from src.inbound import new_message_handler
+from src.message_store import MessageStore
 
 
 class ModemHandler:
@@ -15,6 +17,7 @@ class ModemHandler:
         self.modem_paths = []
         self.messaging = None
         self.modem_manager = ModemManager()
+        self.messagestore = MessageStore()
 
 
     def handle_modem_connected(self):
@@ -27,6 +30,7 @@ class ModemHandler:
                 print(f" some where up {modem_path}")
                 self.get_get_incoming_message(modem_path) 
                 self.modem_paths.append(modem_path)
+                
             print(f"modem pathsss {modem_paths}")
             for modem in modem_list.values():
                 props1 = modem.get_modem_property('Manufacturer')
@@ -35,6 +39,7 @@ class ModemHandler:
                 self.modem_names.append(modem_name)
                 self.modems[modem_name] = modem
                 self.messaging = Messaging(modem)
+                modem_imsi = modem.get_sim().get_property("Imsi")
         else:
             print("No modems found.")
 
@@ -111,13 +116,57 @@ class ModemHandler:
         print(f"your incoming msg {gm_msg}")
         return gm_msg
     
-    def send_messages(self,  text: str, number: str, ):
+    def send_messages(self,  text: str, number: str, modem_imsi ):
         try:
+
+            # modem = modem_manager.get_modem(modem_path)
+
+            timestamp = time.time()
+
+            message_id = MessageStore().store(
+                # modem.g
+                # modem.get_sim().get_property("Imsi"), text, number, 
+                modem_imsi, text, number,
+                timestamp, 'outgoing', 'sending')
+
             msg = self.messaging.send_sms( text, number)
-            return msg
+            logging.debug("Modem IMSI: %s", modem_imsi)
+            logging.debug("message success text:%s, and number: %s ", text,number)
+            logging.info("sent sms successfully! info")
+
+            # return msg
         except Exception as error:
             print(error)
             print("some error of the try for send messages")
+    
+    def load_outgoing(self, modem_imsi, fetch_type=None) -> list:
+        messages = []
+        try:
+            stored_messages = MessageStore().load(
+                    sim_imsi=modem_imsi,
+
+                    _type=fetch_type)
+        except Exception as error:
+            raise error
+
+        else:
+            for message in stored_messages:
+                ret_message = {}
+                ret_message['id'] = message[0]
+                ret_message['text'] = message[2]
+                ret_message['number'] = message[3]
+                ret_message['timestamp'] = message[4]
+                ret_message['date_stored'] = message[5]
+                ret_message['type'] = message[6]
+
+                messages.append(ret_message)
+        
+        print(f"messages here: {messages}")
+
+        return messages
+
+        
+    # def get_messages(self, )
 
     # def sending_api(self, modem_path, text, number ):
     #     try:
@@ -143,7 +192,9 @@ handler.enable_modem(first_modem)
 properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 
-# test_send = handler.send_messages(  "Testing again 3","687022472")
+test_send = handler.send_messages(  "Loaiding Outgoing Works!!!","687022472", first_modem)
+test_load_outgoing = handler.load_outgoing(  first_modem)
+
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
    
