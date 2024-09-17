@@ -50,6 +50,7 @@ class ModemHandler:
         path = []
         for i in self.modem_paths:
             path.append(str(i))
+            # print(f"modem path {i}")
         return path
 
     def get_modem_list_length(self):
@@ -191,8 +192,9 @@ handler.enable_modem(first_modem)
 # print("Properties for first modem:", handler.get_modem_properties(first_modem))
 properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
+# test_getget = handler.get_get_incoming_message(  '/org/freedesktop/ModemManager1/Modem/1')
 
-test_send = handler.send_messages(  "Loaiding Outgoing Works!!!","687022472", first_modem)
+# test_send = handler.send_messages(  "Loaiding Outgoing Works","687022472", first_modem)
 test_load_outgoing = handler.load_outgoing(  first_modem)
 
 for properties in properties_list:

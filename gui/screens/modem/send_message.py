@@ -7,7 +7,7 @@ from src.api_callbacks import ModemHandler
 
 
 class SendMessageWindow(Gtk.Box):
-    def __init__(self, modem_handler):
+    def __init__(self, modem_handler, modem_name):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
@@ -16,6 +16,7 @@ class SendMessageWindow(Gtk.Box):
 
         # self.handler = ModemHandler()
         self.modem_handler = modem_handler
+        self.modem_name = modem_name
 
         # container main
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -88,7 +89,7 @@ class SendMessageWindow(Gtk.Box):
         text = text_buffer.get_text(text_start_iter, text_end_iter, True)
         number = self.number_entry.get_text()
 
-        result = self.modem_handler.send_messages(text, number)
+        result = self.modem_handler.send_messages(text, number, self.modem_name)
         print(f"after the result {result}")
         print(f"text buffer context {text}")
         print(f"number buffer context {number}")

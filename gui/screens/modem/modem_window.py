@@ -195,7 +195,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(home_modem_view, "home_modem")
         
         # send view
-        send_view = SendMessageWindow(self.modem_handler)
+        send_view = SendMessageWindow(self.modem_handler, self.modem_name)
         stack.add_named(send_view, "send")
 
         # incoming view
