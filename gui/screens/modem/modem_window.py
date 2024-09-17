@@ -30,6 +30,7 @@ class ModemWindow(Gtk.Window):
         self.modem_path = modem_path
 
         self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
+        self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)
         
 
         # Create the main container
@@ -203,7 +204,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(incoming_view, "incoming")
 
         # outgoing view
-        outgoing_view = OutgoingMessageWindow()
+        outgoing_view = OutgoingMessageWindow(self.outgoing_messages, self.modem_name, self.modem_handler)
         stack.add_named(outgoing_view, "outgoing")
 
         # failed view
