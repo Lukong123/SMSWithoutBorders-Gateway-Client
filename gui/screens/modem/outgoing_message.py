@@ -19,14 +19,18 @@ class OutgoingMessageWindow(Gtk.Box):
         self.modem_name = modem_name
         
         self.modem_handler.handle_modem_connected()
-        self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)    
+        self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)   
+
+        # scrolled window
+        scrolledwindow = Gtk.ScrolledWindow()
+        self.add(scrolledwindow) 
 
         # Container 1
-        container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         container1.set_vexpand(True)
         container1.set_homogeneous(False)
         container1.set_border_width(10)
-        self.pack_start(container1, True, True, 0)
+        scrolledwindow.add(container1)
 
         # Create the navigation bar
         nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -56,22 +60,25 @@ class OutgoingMessageWindow(Gtk.Box):
 
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         container_main.set_halign(Gtk.Align.CENTER)
-        # screen = Gdk.Screen.get_default()
-        # width_get = screen.get_width()
-        # container_main.set_size_request(int(width_get * 0.4), -1)
+        container_main.set_margin_top(10)
+        screen = Gdk.Screen.get_default()
+        width_get = screen.get_width()
+        container_main.set_size_request(int(width_get * 0.4), -1)
         # container_main.set_size_request(500, -1)
+        
         
         # container_main.set_margin_top(10)
         container_main.set_name("container_main_msg")
-        container1.pack_start(container_main, False, False, 20)
+        container1.pack_start(container_main, False, False, 0)
 
-        # scrolledwindow = Gtk.ScrolledWindow()
-        # scrolledwindow.add(container_main)
-        # self.pack_start(scrolledwindow, True, True, 0)
 
         for message in self.outgoing_messages:
             message_box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
             message_box.set_margin_top(10)
+            message_box.set_margin_right(20)
+            message_box.set_margin_left(20)
+
+
             message_box.set_name("container_main_msg")
             container_main.pack_start(message_box, False, False, 0)
 

@@ -23,13 +23,17 @@ class IncomingMessageWindow(Gtk.Box):
         self.modem_handler.handle_modem_connected()
         self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
         
+        # scrolled window
+        scrolledwindow = Gtk.ScrolledWindow()
+        self.add(scrolledwindow) 
+
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         container1.set_vexpand(True)
         container1.set_homogeneous(False)
         container1.set_border_width(10)
-        self.pack_start(container1, True, True, 0)
-
+        scrolledwindow.add(container1)
+        
         # Create the navigation bar
         nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         nav_bar.set_size_request(-1, 50)
@@ -62,10 +66,15 @@ class IncomingMessageWindow(Gtk.Box):
         screen = Gdk.Screen.get_default()
         width_get = screen.get_width()
         container_main.set_size_request(int(width_get * 0.4), -1)
+
+        container_main.set_name("container_main_msg")
+        container1.pack_start(container_main, False, False, 0)
         
         for message in self.incoming_messages:
             message_box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
             message_box.set_margin_top(10)
+            message_box.set_margin_right(20)
+            message_box.set_margin_left(20)
             message_box.set_name("container_main_msg")
             container_main.pack_start(message_box, False, False, 0)
 
@@ -135,10 +144,6 @@ class IncomingMessageWindow(Gtk.Box):
             reply_label.set_name("time-label") 
             right_box_3.pack_end(reply_label, False, False, 20)
         
-
-        scrolledwindow = Gtk.ScrolledWindow()
-        scrolledwindow.add(container_main)
-        self.pack_start(scrolledwindow, True, True, 0)
 
         # floating action button
         fab_button = Gtk.Button()
