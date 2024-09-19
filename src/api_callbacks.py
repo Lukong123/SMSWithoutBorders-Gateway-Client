@@ -114,7 +114,7 @@ class ModemHandler:
 
     def get_get_incoming_message(self, modem_path):
         gm_msg = get_messages(modem_path, self.modem_manager)
-        print(f"your incoming msg {gm_msg}")
+        # print(f"your incoming msg {gm_msg}")
         return gm_msg
     
     def send_messages(self,  text: str, number: str, modem_imsi ):
@@ -125,8 +125,6 @@ class ModemHandler:
             timestamp = time.time()
 
             message_id = MessageStore().store(
-                # modem.g
-                # modem.get_sim().get_property("Imsi"), text, number, 
                 modem_imsi, text, number,
                 timestamp, 'outgoing', 'sending')
 
@@ -134,13 +132,27 @@ class ModemHandler:
             logging.debug("Modem IMSI: %s", modem_imsi)
             logging.debug("message success text:%s, and number: %s ", text,number)
             logging.info("sent sms successfully! info")
-
-            # return msg
+            logging.info("Message Id: %s", message_id)
+        
         except Exception as error:
-            print(error)
-            print("some error of the try for send messages")
+            logging.exception(f"exception as an error for sent message: {error}")
+
+
+        #     # return msg
+        # except Exception as error:
+        #     logging.exception(f"exception as an error for sent message: {error}")
+        #     failed_messages = {
+        #         text:"text",
+        #         number: "number",
+        #         timestamp: "timestamp"
+        #         }
+        #     return failed_messages
+        
+        #     # print(error)
+        #     # print("some error of the try for send messages")
     
-    def load_outgoing(self, modem_imsi, fetch_type=None) -> list:
+
+    def load_outgoing(self, modem_imsi, fetch_type='outgoing') -> list:
         messages = []
         try:
             stored_messages = MessageStore().load(
@@ -159,12 +171,25 @@ class ModemHandler:
                 ret_message['timestamp'] = message[4]
                 ret_message['date_stored'] = message[5]
                 ret_message['type'] = message[6]
+                # ret_message['status'] = message[7]
+
+
 
                 messages.append(ret_message)
         
         print(f"messages here: {messages}")
 
         return messages
+    
+    def delete_message(self, message_id) -> int:
+        try:
+            row_count = MessageStore().delete(message_id)
+            logging.info("Message with id %s deleted successfully!!", message_id)
+        except Exception as error:
+            raise error
+    
+        return row_count
+
 
         
     # def get_messages(self, )
@@ -194,7 +219,8 @@ properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 # test_getget = handler.get_get_incoming_message(  '/org/freedesktop/ModemManager1/Modem/1')
 
-# test_send = handler.send_messages(  "Loaiding Outgoing Works","687022472", first_modem)
+# test_send = handler.send_messages(  "should delete","687022472", first_modem)
+# test_delete = handler.delete_message('13')
 test_load_outgoing = handler.load_outgoing(  first_modem)
 
 for properties in properties_list:
