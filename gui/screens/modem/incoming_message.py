@@ -19,9 +19,13 @@ class IncomingMessageWindow(Gtk.Box):
         # self.modem_handler= ModemHandler()
         self.modem_handler = modem_handler
         self.modem_path = modem_path
+        self.modem_name = modem_name
         
         self.modem_handler.handle_modem_connected()
         self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
+
+        # self.reply_label = reply_label
+        # reply_label = self.reply_
         
         # scrolled window
         scrolledwindow = Gtk.ScrolledWindow()
@@ -147,6 +151,17 @@ class IncomingMessageWindow(Gtk.Box):
             reply_label.set_text("Reply")
             reply_label.set_name("time-label") 
             right_box_3.pack_end(reply_label, False, False, 20)
+
+            reply_label.connect("button-press-event", self.on_reply_label_clicked)
+
+
+
+            reply_event_box = Gtk.EventBox()
+            reply_event_box.add(reply_label)
+            reply_event_box.connect("button-press-event", self.on_reply_label_clicked)
+
+            right_box_3.pack_end(reply_event_box, False, False, 20)
+            
         
 
         # floating action button
@@ -162,6 +177,8 @@ class IncomingMessageWindow(Gtk.Box):
         alignment.add(fab_button)
         container1.pack_end(alignment, False, False, 0)
 
+        fab_button.connect("clicked", self.on_fab_button_clicked)
+
 # Add the aligned floating action button to the main container
         # self.pack_end(alignment, False, False, 0)
 
@@ -172,11 +189,29 @@ class IncomingMessageWindow(Gtk.Box):
     
 
     def on_delete_button_clicked(self,widget,message_id):
-
         print("After the delete button clicked")
         print(f"Message ID: {message_id}")
         row_count = self.modem_handler.delete_message(message_id), 
         print(f"Rows deleted: {row_count}")
+    
+    def on_reply_label_clicked(self, widget, event):
+        print("on reply label clicked")
+        send_message_window = SendMessageWindow(self.modem_handler, self.modem_name)
+        send_message_window.show_all()
+
+        # reply_label.connect("clicked", self.on_reply_label_clicked)
+        print("on reply label clicked")
+    
+    def on_fab_button_clicked(self, button):
+        try:
+            print("fab button  clicked")
+            send_window = SendMessageWindow(self.modem_handler, self.modem_name)
+            print(f"fab check handler {self.modem_handler}, name: {self.modem_name}")
+            send_window.show_all()
+            print("after fab")
+        except Exception as e:
+            print(f"error for fab button clicked {e}")
+
 
 
     def apply_css(self):
@@ -190,13 +225,10 @@ class IncomingMessageWindow(Gtk.Box):
         style_context = self.get_style_context()
         style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-    def send_label_clicked(self, widget, event):
-        print("send label click")
-        send_window = SendMessageWindow()
-        send_window.show_all()
+
         
-    def run(self):
-        Gtk.main()
+    # def run(self):
+    #     Gtk.main()
 
 # if __name__ == "__main__":
 #     app = ModemWindow()
