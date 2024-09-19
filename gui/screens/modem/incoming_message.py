@@ -132,8 +132,12 @@ class IncomingMessageWindow(Gtk.Box):
             left_box3.set_homogeneous(True)
             row3.pack_start(left_box3, False, False, 0)
 
-            delete_icon = Gtk.Image.new_from_icon_name("edit-delete", Gtk.IconSize.BUTTON)
-            left_box3.pack_start(delete_icon, False, False, 20)
+            delete_button = Gtk.Button()
+            delete_button.set_label("Delete")
+            delete_button.set_name("delete_btn")
+
+            delete_button.connect("clicked", self.on_delete_button_clicked, message['id'])
+            left_box3.pack_start(delete_button, False, False, 20)
 
             right_box_3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             right_box_3.set_homogeneous(True)
@@ -165,6 +169,15 @@ class IncomingMessageWindow(Gtk.Box):
         self.apply_css()
 
         self.show_all()
+    
+
+    def on_delete_button_clicked(self,widget,message_id):
+
+        print("After the delete button clicked")
+        print(f"Message ID: {message_id}")
+        row_count = self.modem_handler.delete_message(message_id), 
+        print(f"Rows deleted: {row_count}")
+
 
     def apply_css(self):
         css_provider = Gtk.CssProvider()
