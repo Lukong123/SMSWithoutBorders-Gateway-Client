@@ -108,8 +108,12 @@ class EncryptedMessageWindow(Gtk.Box):
         left_box3.set_homogeneous(True)
         row3.pack_start(left_box3, False, False, 0)
 
-        delete_icon = Gtk.Image.new_from_icon_name("edit-delete", Gtk.IconSize.BUTTON)
-        left_box3.pack_start(delete_icon, False, False, 20)
+        delete_button = Gtk.Button()
+        delete_button.set_label("Delete")
+        delete_button.set_name("delete_btn")
+
+        # delete_button.connect("clicked", self.on_delete_button_clicked, message['id'])
+        left_box3.pack_start(delete_button, False, False, 20)
 
         right_box_3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         right_box_3.set_homogeneous(True)
