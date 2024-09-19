@@ -137,7 +137,7 @@ class OutgoingMessageWindow(Gtk.Box):
             row3.pack_start(left_box3, False, False, 0)
 
             delete_button = Gtk.Button()
-            delete_button.set_margin_bottom(50)
+            # delete_button.set_margin_bottom(50)
             delete_button.set_label("Delete")
             delete_button.set_name("delete_btn")
 
