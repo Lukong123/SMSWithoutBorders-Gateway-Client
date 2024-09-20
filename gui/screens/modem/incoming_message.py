@@ -188,23 +188,6 @@ class IncomingMessageWindow(Gtk.Box):
         row_count = self.modem_handler.delete_message(message_id), 
         print(f"Rows deleted: {row_count}")
     
-    # def on_reply_label_clicked(self, widget, event):
-    #     print("on reply label clicked")
-    #     send_message_window = SendMessageWindow(self.modem_handler, self.modem_name)
-    #     send_message_window.show_all()
-
-    #     # reply_label.connect("clicked", self.on_reply_label_clicked)
-    #     print("on reply label clicked")
-    
-    # def on_fab_button_clicked(self, button):
-    #     try:
-    #         print("fab button  clicked")
-    #         send_window = SendMessageWindow(self.modem_handler, self.modem_name)
-    #         print(f"fab check handler {self.modem_handler}, name: {self.modem_name}")
-    #         send_window.show_all()
-    #         print("after fab")
-    #     except Exception as e:
-    #         print(f"error for fab button clicked {e}")
 
     def on_reply_label_clicked(self, event_box, event, recepient_number = None):
         # Switch to the "send" view in the stack
