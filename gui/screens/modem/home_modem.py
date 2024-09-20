@@ -148,9 +148,12 @@ class HomeModemWindow(Gtk.Box):
         message_icon = Gtk.Image.new_from_icon_name("mail-send-symbolic", Gtk.IconSize.BUTTON)
         fab_button.add(message_icon)
         fab_button.set_size_request(50, 50)
+        fab_button.connect("clicked", self.on_fab_button_clicked)
+
         alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
         alignment.set_padding(0, 50, 0, 50) 
         alignment.add(fab_button)
+        
         container1.pack_end(alignment, False, False, 0)
 
         # Apply custom CSS styling
@@ -248,6 +251,15 @@ class HomeModemWindow(Gtk.Box):
     def about_label_clicked(label):
         about_window = AboutWindow()
         about_window.show_all()
+    
+
+    def on_fab_button_clicked(self, button):
+        # Switch to the "send" view in the stack
+        print("recognize click on fab button")
+       
+        modem_window = self.get_toplevel()
+        stack = modem_window.get_children()[0].get_children()[1]  # Assuming the stack is the second child of the main box
+        stack.set_visible_child_name("send")
 
     def run(self):
         Gtk.main()
