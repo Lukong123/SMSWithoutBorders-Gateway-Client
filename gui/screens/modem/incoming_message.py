@@ -150,18 +150,12 @@ class IncomingMessageWindow(Gtk.Box):
             reply_label = Gtk.Label()
             reply_label.set_text("Reply")
             reply_label.set_name("time-label") 
+            reply_label.set_has_window(True)
+            reply_label.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+            reply_label.connect("button-press-event", self.on_reply_label_clicked)
             right_box_3.pack_end(reply_label, False, False, 20)
 
-            reply_label.connect("button-press-event", self.on_reply_label_clicked)
-
-
-
-            reply_event_box = Gtk.EventBox()
-            reply_event_box.add(reply_label)
-            reply_event_box.connect("button-press-event", self.on_reply_label_clicked)
-
-            right_box_3.pack_end(reply_event_box, False, False, 20)
-            
+                    
         
 
         # floating action button
@@ -194,23 +188,41 @@ class IncomingMessageWindow(Gtk.Box):
         row_count = self.modem_handler.delete_message(message_id), 
         print(f"Rows deleted: {row_count}")
     
-    def on_reply_label_clicked(self, widget, event):
-        print("on reply label clicked")
-        send_message_window = SendMessageWindow(self.modem_handler, self.modem_name)
+    # def on_reply_label_clicked(self, widget, event):
+    #     print("on reply label clicked")
+    #     send_message_window = SendMessageWindow(self.modem_handler, self.modem_name)
+    #     send_message_window.show_all()
+
+    #     # reply_label.connect("clicked", self.on_reply_label_clicked)
+    #     print("on reply label clicked")
+    
+    # def on_fab_button_clicked(self, button):
+    #     try:
+    #         print("fab button  clicked")
+    #         send_window = SendMessageWindow(self.modem_handler, self.modem_name)
+    #         print(f"fab check handler {self.modem_handler}, name: {self.modem_name}")
+    #         send_window.show_all()
+    #         print("after fab")
+    #     except Exception as e:
+    #         print(f"error for fab button clicked {e}")
+
+    def on_reply_label_clicked(self, event_box, event, recepient_number = None):
+        # Switch to the "send" view in the stack
+        print("recognize click on fab button")
+       
+        modem_window = self.get_toplevel()
+        stack = modem_window.get_children()[0].get_children()[1] 
+        stack.set_visible_child_name("send")
+        send_message_window = SendMessageWindow(modem_handler=self.modem_handler, modem_name=self.modem_name, recepient_number=recepient_number)
         send_message_window.show_all()
 
-        # reply_label.connect("clicked", self.on_reply_label_clicked)
-        print("on reply label clicked")
-    
     def on_fab_button_clicked(self, button):
-        try:
-            print("fab button  clicked")
-            send_window = SendMessageWindow(self.modem_handler, self.modem_name)
-            print(f"fab check handler {self.modem_handler}, name: {self.modem_name}")
-            send_window.show_all()
-            print("after fab")
-        except Exception as e:
-            print(f"error for fab button clicked {e}")
+        # Switch to the "send" view in the stack
+        print("recognize click on fab button")
+       
+        modem_window = self.get_toplevel()
+        stack = modem_window.get_children()[0].get_children()[1] 
+        stack.set_visible_child_name("send")
 
 
 
