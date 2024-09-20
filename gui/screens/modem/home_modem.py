@@ -258,7 +258,7 @@ class HomeModemWindow(Gtk.Box):
         print("recognize click on fab button")
        
         modem_window = self.get_toplevel()
-        stack = modem_window.get_children()[0].get_children()[1]  # Assuming the stack is the second child of the main box
+        stack = modem_window.get_children()[0].get_children()[1] 
         stack.set_visible_child_name("send")
 
     def run(self):
