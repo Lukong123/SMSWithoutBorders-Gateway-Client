@@ -121,6 +121,8 @@ class AboutWindow(Gtk.Box):
         alignment.add(fab_button)
         container1.pack_end(alignment, False, False, 0)
 
+        fab_button.connect("clicked", self.on_fab_button_clicked)
+
 
         # Apply custom CSS styling
         self.apply_css()
@@ -142,6 +144,16 @@ class AboutWindow(Gtk.Box):
         print("send label click")
         send_window = SendMessageWindow()
         send_window.show_all()
+
+    def on_fab_button_clicked(self, button):
+        # Switch to the "send" view in the stack
+        print("recognize click on fab button")
+       
+        modem_window = self.get_toplevel()
+        stack = modem_window.get_children()[0].get_children()[1] 
+        stack.set_visible_child_name("send")
+
+
         
     def run(self):
         Gtk.main()
