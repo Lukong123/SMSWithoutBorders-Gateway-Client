@@ -138,20 +138,6 @@ class ModemHandler:
             logging.exception(f"exception as an error for sent message: {error}")
 
 
-        #     # return msg
-        # except Exception as error:
-        #     logging.exception(f"exception as an error for sent message: {error}")
-        #     failed_messages = {
-        #         text:"text",
-        #         number: "number",
-        #         timestamp: "timestamp"
-        #         }
-        #     return failed_messages
-        
-        #     # print(error)
-        #     # print("some error of the try for send messages")
-    
-
     def load_outgoing(self, modem_imsi, fetch_type='outgoing') -> list:
         messages = []
         try:

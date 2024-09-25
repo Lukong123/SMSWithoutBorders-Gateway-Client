@@ -15,9 +15,6 @@ class DekuLinux(Gtk.Window):
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
         self.modem_handler = ModemHandler()
-        # self.modem_path = self.modem_handler.get_modem_path()
-        # print(f"unwatch {self.modem_path}")
-
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.add(main_box)
@@ -134,14 +131,12 @@ class DekuLinux(Gtk.Window):
             print(f"-{modem_path}")
 
             event_box = Gtk.EventBox()
-            # event_box.connect("button-press-event", self.on_modem_click(event, modem_name))
             event_box.connect("button-press-event", lambda widget, event, path=modem_path, name=modem_name: self.on_modem_click(widget, event, name, path))
             event_box.add(modem_label)  
             modem_container.pack_start(event_box, False, False, 0)
 
             modem_container.pack_start(modem_label, False, False, 0)
 
-        # Call show_all on the container2 to ensure all labels are displayed
         container2.show_all()
 
     def on_modem_click(self, widget, event, modem_name, modem_path):
