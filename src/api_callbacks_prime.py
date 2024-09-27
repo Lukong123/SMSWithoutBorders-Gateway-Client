@@ -1,30 +1,21 @@
-from src.modem_manager import ModemManager
-from src.modem import Modem
+from smswithoutborders_libsig.keypairs import x25519
 
+alice = x25519()
+alice_public_key_original = alice.init()
 
+bob = x25519("db_keys/bobs_keys.db")
+bob_public_key_original = bob.init() # not an encryption key, won't work unless for AD
 
-def callback_function(Modem):
-    # pp = modem.enable
-    props1 = Modem.get_modem_property('Manufacturer')
-    props2 = Modem.get_modem_property('Model')
+SK = alice.agree(bob_public_key_original)
+SK1 = bob.agree(alice_public_key_original)
 
-    modem_name = f"{props1} {props2}"
+# store the following
+alice_pnt_keystore = alice.pnt_keystore
+alice_secret_key = alice.secret_key # used to decrypt the keystore sql file
 
+# reinitializing would be...
+alice = x25519(pnt_keystore=alice_pnt_keystore, keystore_path=alice_keystore_path, secret_key=alice_secret_key)
 
-    print(modem_name)
-
-
-# mm = ModemManager()
-# mm.add_modem_connected_handler(callback_function)
-# modem_list = mm.list_modems()
-# print(modem_list)
-print("enabling....", Modem.enable)
-# modem_list_length= len(modem_list)
-# print(modem_list_length)
-
-
-# mm.daemon()
-
-
-
-
+assert(SK)
+assert(SK1)
+assert(SK == SK1)
