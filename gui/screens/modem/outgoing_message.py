@@ -20,17 +20,18 @@ class OutgoingMessageWindow(Gtk.Box):
         
         self.modem_handler.handle_modem_connected()
         self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)   
+        self.container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
         # scrolled window
         scrolledwindow = Gtk.ScrolledWindow()
         self.add(scrolledwindow) 
 
         # Container 1
-        container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        container1.set_vexpand(True)
-        container1.set_homogeneous(False)
-        container1.set_border_width(10)
-        scrolledwindow.add(container1)
+        self.container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.container1.set_vexpand(True)
+        self.container1.set_homogeneous(False)
+        self.container1.set_border_width(10)
+        scrolledwindow.add(self.container1)
 
         # Create the navigation bar
         nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -38,7 +39,7 @@ class OutgoingMessageWindow(Gtk.Box):
         nav_bar.set_homogeneous(False)
         # nav_bar.set_border_width(10)
         nav_bar.set_name("nav-bar")
-        container1.pack_start(nav_bar, False, False, 0)
+        self.container1.pack_start(nav_bar, False, False, 0)
 
         # Create a box for the left side of the navigation bar
         left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -57,19 +58,41 @@ class OutgoingMessageWindow(Gtk.Box):
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
         right_box.pack_end(nav_icon, False, False, 20)
 
+        self.message_ui()
 
-        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        container_main.set_halign(Gtk.Align.CENTER)
-        container_main.set_margin_top(10)
+        # floating action button
+        fab_button = Gtk.Button()
+        fab_button.set_tooltip_text("Compose")
+        fab_button.get_style_context().add_class("fab-button")
+
+        message_icon = Gtk.Image.new_from_icon_name("mail-send-symbolic", Gtk.IconSize.BUTTON)
+        fab_button.add(message_icon)
+        fab_button.set_size_request(50, 50)
+        alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
+        alignment.set_padding(0, 50, 0, 50) 
+        alignment.add(fab_button)
+        self.container1.pack_end(alignment, False, False, 0)
+
+        fab_button.connect("clicked", self.on_fab_button_clicked)
+
+
+        # Apply custom CSS styling
+        self.apply_css()
+
+        self.show_all()
+
+    def message_ui(self):
+        self.container_main.set_halign(Gtk.Align.CENTER)
+        self.container_main.set_margin_top(10)
         screen = Gdk.Screen.get_default()
         width_get = screen.get_width()
-        container_main.set_size_request(int(width_get * 0.4), -1)
+        self.container_main.set_size_request(int(width_get * 0.4), -1)
         # container_main.set_size_request(500, -1)
         
         
         # container_main.set_margin_top(10)
-        container_main.set_name("container_main_msg")
-        container1.pack_start(container_main, False, False, 0)
+        self.container_main.set_name("container_main_msg")
+        self.container1.pack_start(self.container_main, False, False, 0)
 
 
         for message in self.outgoing_messages:
@@ -80,7 +103,7 @@ class OutgoingMessageWindow(Gtk.Box):
 
 
             message_box.set_name("container_main_msg")
-            container_main.pack_start(message_box, False, False, 0)
+            self.container_main.pack_start(message_box, False, False, 0)
 
             row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             row1.set_homogeneous(False)
@@ -152,37 +175,29 @@ class OutgoingMessageWindow(Gtk.Box):
             reply_label.set_text("Reply")
             reply_label.set_name("time-label") 
             right_box_3.pack_end(reply_label, False, False, 20)
+        self.container_main.show_all()
 
-
-        # floating action button
-        fab_button = Gtk.Button()
-        fab_button.set_tooltip_text("Compose")
-        fab_button.get_style_context().add_class("fab-button")
-
-        message_icon = Gtk.Image.new_from_icon_name("mail-send-symbolic", Gtk.IconSize.BUTTON)
-        fab_button.add(message_icon)
-        fab_button.set_size_request(50, 50)
-        alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
-        alignment.set_padding(0, 50, 0, 50) 
-        alignment.add(fab_button)
-        container1.pack_end(alignment, False, False, 0)
-
-        fab_button.connect("clicked", self.on_fab_button_clicked)
-
-
-        # Apply custom CSS styling
-        self.apply_css()
-
-        self.show_all()
-    
-
-    def on_delete_button_clicked(self,widget,message_id):
-
+        
+    def on_delete_button_clicked(self, widget, message_id):
         print("After the delete button clicked")
         print(f"Message ID: {message_id}")
-        row_count = self.modem_handler.delete_message(message_id), 
+        
+        row_count_tuple = self.modem_handler.delete_message(message_id)
+        row_count = row_count_tuple[0] if isinstance(row_count_tuple, tuple) else row_count_tuple
+        
         print(f"Rows deleted: {row_count}")
+        
+        # Check if the message was successfully deleted
+        if row_count > 0:
+            self.reload_outgoing_messages()
 
+    def reload_outgoing_messages(self):
+        self.outgoing_messages = self.modem_handler.load_outgoing(self.modem_name)
+        self.refresh_ui()
+        self.container_main.foreach(Gtk.Widget.destroy) 
+        self.message_ui()
+
+       
     def on_fab_button_clicked(self, button):
         # Switch to the "send" view in the stack
         print("recognize click on fab button")
