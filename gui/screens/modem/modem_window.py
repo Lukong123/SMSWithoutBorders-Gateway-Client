@@ -29,7 +29,7 @@ class ModemWindow(Gtk.Window):
         self.modem_name = modem_name
         self.modem_path = modem_path
 
-        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
+        self.incoming_messages = self.modem_handler.load_incoming(modem_path)
         self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)
         
 
@@ -200,7 +200,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(send_view, "send")
 
         # incoming view
-        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_path, self.modem_handler)
+        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_handler)
         stack.add_named(incoming_view, "incoming")
 
         # outgoing view

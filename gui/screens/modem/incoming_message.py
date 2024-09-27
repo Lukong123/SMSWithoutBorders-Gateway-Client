@@ -10,7 +10,7 @@ from src.api_callbacks import ModemHandler
 
 
 class IncomingMessageWindow(Gtk.Box):
-    def __init__(self, incoming_messages, modem_name, modem_path, modem_handler):
+    def __init__(self, incoming_messages, modem_name, modem_handler):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
@@ -18,11 +18,10 @@ class IncomingMessageWindow(Gtk.Box):
         self.set_border_width(5)
         # self.modem_handler= ModemHandler()
         self.modem_handler = modem_handler
-        self.modem_path = modem_path
         self.modem_name = modem_name
         
         self.modem_handler.handle_modem_connected()
-        self.incoming_messages = self.modem_handler.get_get_incoming_message(modem_path)
+        self.incoming_messages = self.modem_handler.load_incoming(modem_name)
 
         # self.reply_label = reply_label
         # reply_label = self.reply_

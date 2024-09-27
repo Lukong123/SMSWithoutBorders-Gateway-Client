@@ -29,7 +29,7 @@ class ModemHandler:
             modem_paths = list(modem_list.keys())
             for modem_path in modem_paths:
                 print(f" some where up {modem_path}")
-                self.get_get_incoming_message(modem_path) 
+                # self.get_get_incoming_message(modem_path) 
                 self.modem_paths.append(modem_path)
                 
             print(f"modem pathsss {modem_paths}")
@@ -143,11 +143,6 @@ class ModemHandler:
         return messages
     
 
-    def get_get_incoming_message(self, modem_path):
-        gm_msg = get_messages(modem_path, self.modem_manager)
-        # print(f"your incoming msg {gm_msg}")
-        return gm_msg
-    
     def send_messages(self,  text: str, number: str, modem_imsi ):
         try:
 
