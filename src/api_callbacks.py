@@ -18,6 +18,7 @@ class ModemHandler:
         self.messaging = None
         self.modem_manager = ModemManager()
         self.messagestore = MessageStore()
+        self.modem_imsi = ""
 
 
     def handle_modem_connected(self):
@@ -39,7 +40,7 @@ class ModemHandler:
                 self.modem_names.append(modem_name)
                 self.modems[modem_name] = modem
                 self.messaging = Messaging(modem)
-                modem_imsi = modem.get_sim().get_property("Imsi")
+                self.modem_imsi = modem.get_sim().get_property("Imsi")
         else:
             print("No modems found.")
 
@@ -112,6 +113,36 @@ class ModemHandler:
         return property_list
 
 
+    def load_incoming(self, modem_imsi=None, fetch_type='incoming') -> list:
+        messages = []
+        try:
+            stored_messages = MessageStore().load(
+                    sim_imsi=self.modem_imsi,
+
+                    _type=fetch_type)
+        except Exception as error:
+            raise error
+
+        else:
+            for message in stored_messages:
+                ret_message = {}
+                ret_message['id'] = message[0]
+                ret_message['text'] = message[2]
+                ret_message['number'] = message[3]
+                ret_message['timestamp'] = message[4]
+                ret_message['date_stored'] = message[5]
+                ret_message['type'] = message[6]
+                # ret_message['status'] = message[7]
+
+
+
+                messages.append(ret_message)
+        
+        print(f"incoming messages here from new function: {messages}")
+
+        return messages
+    
+
     def get_get_incoming_message(self, modem_path):
         gm_msg = get_messages(modem_path, self.modem_manager)
         # print(f"your incoming msg {gm_msg}")
@@ -163,7 +194,7 @@ class ModemHandler:
 
                 messages.append(ret_message)
         
-        print(f"messages here: {messages}")
+        print(f"messages here outgoing: {messages}")
 
         return messages
     
@@ -207,7 +238,10 @@ properties_list = handler.get_modem_properties(first_modem)
 
 # test_send = handler.send_messages(  "should delete","687022472", first_modem)
 # test_delete = handler.delete_message('13')
+test_load_incoming = handler.load_incoming(  first_modem)
 test_load_outgoing = handler.load_outgoing(  first_modem)
+
+
 
 for properties in properties_list:
     print("Manufac:", properties['Imei'],first_modem)
