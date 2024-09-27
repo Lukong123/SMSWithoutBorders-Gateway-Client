@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 import subprocess
 
@@ -21,6 +21,10 @@ class OutgoingMessageWindow(Gtk.Box):
         self.modem_handler.handle_modem_connected()
         self.outgoing_messages = self.modem_handler.load_outgoing(modem_name)   
         self.container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.popover= Gtk.Popover.new(self)
+        self.popover.set_position(Gtk.PositionType.TOP)
+        popover_label = Gtk.Label(label="Delete Successful")
+        self.popover.add(popover_label)
 
         # scrolled window
         scrolledwindow = Gtk.ScrolledWindow()
@@ -87,13 +91,9 @@ class OutgoingMessageWindow(Gtk.Box):
         screen = Gdk.Screen.get_default()
         width_get = screen.get_width()
         self.container_main.set_size_request(int(width_get * 0.4), -1)
-        # container_main.set_size_request(500, -1)
-        
-        
-        # container_main.set_margin_top(10)
+
         self.container_main.set_name("container_main_msg")
         self.container1.pack_start(self.container_main, False, False, 0)
-
 
         for message in self.outgoing_messages:
             message_box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
@@ -177,6 +177,15 @@ class OutgoingMessageWindow(Gtk.Box):
             right_box_3.pack_end(reply_label, False, False, 20)
         self.container_main.show_all()
 
+    def show_delete_successful_popover(self):
+        self.popover.show_all()
+        GLib.timeout_add_seconds(2, self.hide_delete_successful_popover)
+
+    def hide_delete_successful_popover(self):
+        self.popover.hide()
+        # self.reload_outgoing_messages()
+        return False
+
         
     def on_delete_button_clicked(self, widget, message_id):
         print("After the delete button clicked")
@@ -189,11 +198,11 @@ class OutgoingMessageWindow(Gtk.Box):
         
         # Check if the message was successfully deleted
         if row_count > 0:
+            self.show_delete_successful_popover()
             self.reload_outgoing_messages()
 
     def reload_outgoing_messages(self):
         self.outgoing_messages = self.modem_handler.load_outgoing(self.modem_name)
-        self.refresh_ui()
         self.container_main.foreach(Gtk.Widget.destroy) 
         self.message_ui()
 
