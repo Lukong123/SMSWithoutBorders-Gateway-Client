@@ -18,23 +18,15 @@ class SendMessageWindow(Gtk.Box):
         self.modem_handler = modem_handler
         self.modem_name = modem_name
 
+        mainscrolledwindow = Gtk.ScrolledWindow()
+        self.add(mainscrolledwindow) 
+
         # container main
-        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=1)
         container_main.set_halign(Gtk.Align.CENTER)
-        container_main.set_name("center-box-message")
-        self.pack_start(container_main, True, True, 0)
-
-
-        # Send button with label and logo
-        send_button = Gtk.Button()
-        send_button.set_margin_bottom(50)
-        send_button.set_label("Send")
-        send_button.set_name("send_btn")
-        send_button.set_image(Gtk.Image.new_from_icon_name("mail-send", Gtk.IconSize.BUTTON))
-        container_main.pack_start(send_button, False, False, 10)
-
-        send_button.connect("clicked", self.on_send_button_clicked)
-
+        container_main.set_name("center-box-send")
+        self.pack_start(container_main, False, False, 0)
+        mainscrolledwindow.add(container_main)
 
         # message label
         message_label = Gtk.Label()
@@ -45,16 +37,22 @@ class SendMessageWindow(Gtk.Box):
         line = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
         container_main.pack_start(line, False, False, 0)
 
+        number_label = Gtk.Label()
+        number_label.set_text("Phone Number")
+        number_label.set_name("number_label")
+        container_main.pack_start(number_label, False, False, 0)
+
         # Text entry for phone number
         self.number_entry = Gtk.Entry()
-        self.number_entry.set_placeholder_text("Number:")
+        self.number_entry.set_placeholder_text("677777777")
         if recepient_number:
             recepient_number.set_text(recepient_number)
+        self.number_entry.set_name("number_entry")
         container_main.pack_start(self.number_entry, False, False, 0)
 
-        self.grid = Gtk.Grid()
+        # self.grid = Gtk.Grid()
 
-        self.add(self.grid)
+        # self.add(self.grid)
 
 
         # self.create_textview()
@@ -63,19 +61,31 @@ class SendMessageWindow(Gtk.Box):
         scrolledwindow.set_size_request(400, 200) 
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
-        scrolledwindow.set_margin_top(0)
+        # scrolledwindow.set_margin_top(0)
 
         self.textview  = Gtk.TextView()
         textbuffer = self.textview.get_buffer()
-        textbuffer.set_text(
-            "Compose..."
-        )
+        textbuffer.set_text("Compose...")
+        self.textview.set_name('textbuffer')
 
         scrolledwindow.add(self.textview)
         # self.grid.attach(scrolledwindow, 0, 0, 1, 1)
 
 
         container_main.pack_start(scrolledwindow, False, False, 0)
+
+        # Send button with label and logo
+        send_button = Gtk.Button()
+        send_button.set_margin_bottom(15)
+        send_button.set_margin_top(10)
+
+        send_button.set_label("Send")
+        send_button.set_name("send_btn")
+        send_button.set_image(Gtk.Image.new_from_icon_name("mail-send", Gtk.IconSize.BUTTON))
+        container_main.pack_start(send_button, False, False, 10)
+
+        send_button.connect("clicked", self.on_send_button_clicked)
+
         
 
     
@@ -98,5 +108,23 @@ class SendMessageWindow(Gtk.Box):
         print(f"  result type {type(result)}")
 
 
+    def apply_css(self):
+        css_provider = Gtk.CssProvider()
+        css_path = "gui/utils/styles/styles.css"
+        css_provider.load_from_path(css_path)
+        screen = Gdk.Screen.get_default()
+        style_context = self.get_style_context()
+        style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+    # def onFocusIn(self, event):
+    #     if (textbuf.get_text(textbuf.get_start_iter(), textbuf.get_end_iter(), True) == placeholderStr):
+    #         textbuf.set_text("")
+    #     return False
+
+
+    # def onFocusOut(self, event):
+    #     if (textbuf.get_text(textbuf.get_start_iter(), textbuf.get_end_iter(), True) == ""):
+    #         textbuf.set_text(placeholderStr)
+    #     return False
 
    

@@ -98,3 +98,33 @@ margin-left: 10px;
     font-size: 25px;
 
 }
+
+
+/* Send Message */
+#textbuffer{
+    color: pink;
+}
+
+#number_label{
+    color: yellow;
+    padding-right: 290px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+
+#center-box-send{
+    margin: 35px;
+    padding: 15px;
+    /* width: 80%; */
+    border: 1px solid darkblue;
+
+}
+
+#number_entry{
+    margin-bottom: 15px;
+}
+/* #textbuffer::-webkit-input-placeholder::before{
+    color: orange;
+    content: "Compose here...";
+} */
