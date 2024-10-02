@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 import subprocess
 
@@ -22,20 +22,23 @@ class IncomingMessageWindow(Gtk.Box):
         
         self.modem_handler.handle_modem_connected()
         self.incoming_messages = self.modem_handler.load_incoming(modem_name)
+        self.container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.popover= Gtk.Popover.new(self)
+        self.popover.set_position(Gtk.PositionType.TOP)
+        popover_label = Gtk.Label(label="Delete Successful")
+        self.popover.add(popover_label)
 
-        # self.reply_label = reply_label
-        # reply_label = self.reply_
-        
         # scrolled window
         scrolledwindow = Gtk.ScrolledWindow()
         self.add(scrolledwindow) 
 
         # Container 1
-        container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        container1.set_vexpand(True)
-        container1.set_homogeneous(False)
-        container1.set_border_width(10)
-        scrolledwindow.add(container1)
+        self.container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.container1.set_vexpand(True)
+        self.container1.set_homogeneous(False)
+        self.container1.set_border_width(10)
+        scrolledwindow.add(self.container1)
+
         
         # Create the navigation bar
         nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -43,7 +46,7 @@ class IncomingMessageWindow(Gtk.Box):
         nav_bar.set_homogeneous(False)
         # nav_bar.set_border_width(10)
         nav_bar.set_name("nav-bar")
-        container1.pack_start(nav_bar, False, False, 0)
+        self.container1.pack_start(nav_bar, False, False, 0)
 
         # Create a box for the left side of the navigation bar
         left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -61,25 +64,46 @@ class IncomingMessageWindow(Gtk.Box):
 
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
         right_box.pack_end(nav_icon, False, False, 20)
+        self.message_ui()
 
 
-        container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        container_main.set_halign(Gtk.Align.CENTER)
-        container_main.set_margin_top(10)
+        # floating action button
+        fab_button = Gtk.Button()
+        fab_button.set_tooltip_text("Compose")
+        fab_button.get_style_context().add_class("fab-button")
+
+        message_icon = Gtk.Image.new_from_icon_name("mail-send-symbolic", Gtk.IconSize.BUTTON)
+        fab_button.add(message_icon)
+        fab_button.set_size_request(50, 50)
+        alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
+        alignment.set_padding(0, 0, 10, 10) 
+        alignment.add(fab_button)
+        self.container1.pack_end(alignment, False, False, 0)
+
+        fab_button.connect("clicked", self.on_fab_button_clicked)
+
+        # Apply custom CSS styling
+        self.apply_css()
+
+        self.show_all()
+    
+    def message_ui(self):
+        self.container_main.set_halign(Gtk.Align.CENTER)
+        self.container_main.set_margin_top(10)
         screen = Gdk.Screen.get_default()
         width_get = screen.get_width()
-        container_main.set_size_request(int(width_get * 0.4), -1)
+        self.container_main.set_size_request(int(width_get * 0.4), -1)
 
-        container_main.set_name("container_main_msg")
-        container1.pack_start(container_main, False, False, 0)
-        
+        self.container_main.set_name("container_main_msg")
+        self.container1.pack_start(self.container_main, False, False, 0)
+
         for message in self.incoming_messages:
             message_box = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
             message_box.set_margin_top(10)
             message_box.set_margin_right(20)
             message_box.set_margin_left(20)
             message_box.set_name("container_main_msg")
-            container_main.pack_start(message_box, False, False, 0)
+            self.container_main.pack_start(message_box, False, False, 0)
 
             row1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             row1.set_homogeneous(False)
@@ -154,38 +178,77 @@ class IncomingMessageWindow(Gtk.Box):
             reply_label.connect("button-press-event", self.on_reply_label_clicked)
             right_box_3.pack_end(reply_label, False, False, 20)
 
-                    
+            self.container_main.show_all()
+
+
+
+    def show_delete_successful_popover(self):
+        self.popover.show_all()
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+        print("show delete successful now")
+
+        GLib.timeout_add_seconds(14, self.hide_delete_successful_popover)
+
+    def hide_delete_successful_popover(self):
+        self.popover.hide()
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+        print("hide delete successful now")
+
+
+        return False
+
         
-
-        # floating action button
-        fab_button = Gtk.Button()
-        fab_button.set_tooltip_text("Compose")
-        fab_button.get_style_context().add_class("fab-button")
-
-        message_icon = Gtk.Image.new_from_icon_name("mail-send-symbolic", Gtk.IconSize.BUTTON)
-        fab_button.add(message_icon)
-        fab_button.set_size_request(50, 50)
-        alignment = Gtk.Alignment.new(1, 0.8, 0, 0)
-        alignment.set_padding(0, 0, 10, 10) 
-        alignment.add(fab_button)
-        container1.pack_end(alignment, False, False, 0)
-
-        fab_button.connect("clicked", self.on_fab_button_clicked)
-
-# Add the aligned floating action button to the main container
-        # self.pack_end(alignment, False, False, 0)
-
-        # Apply custom CSS styling
-        self.apply_css()
-
-        self.show_all()
-    
-
-    def on_delete_button_clicked(self,widget,message_id):
+    def on_delete_button_clicked(self, widget, message_id):
         print("After the delete button clicked")
         print(f"Message ID: {message_id}")
-        row_count = self.modem_handler.delete_message(message_id), 
+        # self.incoming_messages = self.modem_handler.load_incoming(self.modem_name)
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length: {len(self.modem_handler.load_incoming(self.modem_name))}")
+
+        
+        row_count_tuple = self.modem_handler.delete_message(message_id)
+        row_count = row_count_tuple[0] if isinstance(row_count_tuple, tuple) else row_count_tuple
+        
         print(f"Rows deleted: {row_count}")
+        print(f"Message length after: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length after: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length after: {len(self.modem_handler.load_incoming(self.modem_name))}")
+        print(f"Message length after: {len(self.modem_handler.load_incoming(self.modem_name))}")
+
+
+        
+        # Check if the message was successfully deleted
+        if row_count > 0:
+            self.show_delete_successful_popover()
+            self.reload_incoming_messages()
+
+    def reload_incoming_messages(self):
+        self.incoming_messages = self.modem_handler.load_incoming(self.modem_name)
+        self.container_main.foreach(Gtk.Widget.destroy) 
+        self.message_ui()
+
+
     
 
     def on_reply_label_clicked(self, event_box, event, recepient_number = None):
