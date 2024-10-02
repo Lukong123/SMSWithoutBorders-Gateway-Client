@@ -61,6 +61,9 @@ class OutgoingMessageWindow(Gtk.Box):
 
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
         right_box.pack_end(nav_icon, False, False, 20)
+        header = Gtk.Label()
+        header.set_text("Outgoing Messages")
+        self.container1.pack_start(header, False, False, 5)
 
         self.message_ui()
 

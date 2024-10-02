@@ -64,6 +64,10 @@ class IncomingMessageWindow(Gtk.Box):
 
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
         right_box.pack_end(nav_icon, False, False, 20)
+
+        header = Gtk.Label()
+        header.set_text("Incoming Messages")
+        self.container1.pack_start(header, False, False, 5)
         self.message_ui()
 
 
@@ -195,7 +199,7 @@ class IncomingMessageWindow(Gtk.Box):
         print("show delete successful now")
         print("show delete successful now")
 
-        GLib.timeout_add_seconds(14, self.hide_delete_successful_popover)
+        GLib.timeout_add_seconds(25, self.hide_delete_successful_popover)
 
     def hide_delete_successful_popover(self):
         self.popover.hide()
