@@ -92,6 +92,11 @@ margin-left: 10px;
     color: black;
 }
 
+#header_label{
+    padding-right: 1300px;
+    font-size: 20px;
+}
+
 
 /* message forwarding */
 #message-label-fwd {

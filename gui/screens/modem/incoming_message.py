@@ -67,6 +67,7 @@ class IncomingMessageWindow(Gtk.Box):
 
         header = Gtk.Label()
         header.set_text("Incoming Messages")
+        header.set_name("header_label")
         self.container1.pack_start(header, False, False, 5)
         self.message_ui()
 

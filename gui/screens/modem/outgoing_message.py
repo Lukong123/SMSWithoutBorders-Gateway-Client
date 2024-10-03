@@ -63,6 +63,7 @@ class OutgoingMessageWindow(Gtk.Box):
         right_box.pack_end(nav_icon, False, False, 20)
         header = Gtk.Label()
         header.set_text("Outgoing Messages")
+        header.set_name("header_label")
         self.container1.pack_start(header, False, False, 5)
 
         self.message_ui()
