@@ -219,15 +219,15 @@ class ModemHandler:
 
 
 
-handler = ModemHandler()
-handler.handle_modem_connected()
+# handler = ModemHandler()
+# handler.handle_modem_connected()
 
-modem_names = handler.get_modem_names()
+# modem_names = handler.get_modem_names()
 
-first_modem = modem_names[0]
-handler.enable_modem(first_modem)
-# print("Properties for first modem:", handler.get_modem_properties(first_modem))
-properties_list = handler.get_modem_properties(first_modem)
+# first_modem = modem_names[0]
+# handler.enable_modem(first_modem)
+# # print("Properties for first modem:", handler.get_modem_properties(first_modem))
+# properties_list = handler.get_modem_properties(first_modem)
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 # test_getget = handler.get_get_incoming_message(  '/org/freedesktop/ModemManager1/Modem/1')
 
@@ -238,6 +238,6 @@ properties_list = handler.get_modem_properties(first_modem)
 
 
 
-for properties in properties_list:
-    print("Manufac:", properties['Imei'],first_modem)
+# for properties in properties_list:
+#     print("Manufac:", properties['Imei'],first_modem)
    

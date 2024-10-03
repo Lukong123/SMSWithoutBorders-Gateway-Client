@@ -1,4 +1,5 @@
 import gi
+import threading
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 from gui.utils.widgets.horizontal_line import HorizontalLine
@@ -6,6 +7,7 @@ from gui.utils.widgets.horizontal_line import HorizontalLine
 from gui.screens.modem.modem_window import ModemWindow
 
 from src.api_callbacks import ModemHandler
+from src.modem_manager import ModemManager
 
 
 class DekuLinux(Gtk.Window):
@@ -15,6 +17,7 @@ class DekuLinux(Gtk.Window):
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
         self.modem_handler = ModemHandler()
+
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.add(main_box)
@@ -59,7 +62,7 @@ class DekuLinux(Gtk.Window):
         self.modem_label = Gtk.Label()
         event_box.add(self.modem_label)
         modem_container.pack_start(self.modem_label, False, False, 0)
-        self.update_modem_list()
+        # self.update_modem_list() #it needs to run whenever a modem comes and go, add in callback.
 
         main_box.pack_end(container2, True, True, 0)
 
@@ -104,6 +107,7 @@ class DekuLinux(Gtk.Window):
         modem_list_length = self.modem_handler.get_modem_list_length()
         print("Updating device label after call back...")
         print("Modem list length:", modem_list_length)
+
         self.device_label.set_text(f"{modem_list_length} device(s)")
     
 
@@ -116,10 +120,11 @@ class DekuLinux(Gtk.Window):
         print("Updating device labels after callback...")
         print("Modem list length:", len(modem_names))
 
-        modem_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+
+        self.modem_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         container2 = self.modem_label.get_parent().get_parent()
         # container2.remove(self.modem_label)
-        container2.pack_start(modem_container, False, False, 0)
+        container2.pack_start(self.modem_container, False, False, 0)
 
         for modem_name in modem_names:
             modem_label = Gtk.Label()
@@ -133,9 +138,9 @@ class DekuLinux(Gtk.Window):
             event_box = Gtk.EventBox()
             event_box.connect("button-press-event", lambda widget, event, path=modem_path, name=modem_name: self.on_modem_click(widget, event, name, path))
             event_box.add(modem_label)  
-            modem_container.pack_start(event_box, False, False, 0)
+            self.modem_container.pack_start(event_box, False, False, 0)
 
-            modem_container.pack_start(modem_label, False, False, 0)
+            self.modem_container.pack_start(modem_label, False, False, 0)
 
         container2.show_all()
 
@@ -156,9 +161,21 @@ class DekuLinux(Gtk.Window):
         style_context = self.get_style_context()
         style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+    def new_modem_callback(self, modem):
+        print("new modem callback here")
+        self.update_modem_list()
+        self.update_device_label()
+
 
     def run(self):
-        Gtk.main()
+
+
+        self.mm = ModemManager()
+        self.mm.add_modem_connected_handler(self.new_modem_callback)
+        thread= threading.Thread(target=self.mm.daemon)
+        thread.start()
+
+        Gtk.main() #thread it, thread daemon running and gtk. 
 
 
 if __name__ == "__main__":
