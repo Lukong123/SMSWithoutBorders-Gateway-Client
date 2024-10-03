@@ -59,7 +59,7 @@ class ModemWindow(Gtk.Window):
         home_modem_label = Gtk.Label()
         home_modem_label.set_text("Home Modem")
         home_modem_label.set_name("side_label")
-        home_modem_label.set_name("active")
+        # home_modem_label.set_name("home_modem_label")
         home_modem_label.set_margin_bottom(8)
         home_modem_label.set_margin_top(60)
         home_modem_event_box = Gtk.EventBox()
@@ -74,7 +74,9 @@ class ModemWindow(Gtk.Window):
         # send
         send_label = Gtk.Label()
         send_label.set_text("Send")
+        # send_label.set_name("send_label")
         send_label.set_name("side_label")
+
         send_label.set_margin_bottom(8)
         send_label.set_margin_top(8)
         send_event_box = Gtk.EventBox()
@@ -89,7 +91,9 @@ class ModemWindow(Gtk.Window):
         # incoming
         incoming_label = Gtk.Label()
         incoming_label.set_text("Incoming")
+        # incoming_label.set_name("incoming_label")
         incoming_label.set_name("side_label")
+
         incoming_label.set_margin_bottom(8)
         incoming_label.set_margin_top(8)
         incoming_event_box = Gtk.EventBox()
@@ -274,22 +278,28 @@ class ModemWindow(Gtk.Window):
         item2 = Gtk.Label()
         item2.set_text("Item 2")
 
-        # dropdownbox = Gtk.
 
-    def set_active_label(self, label_name):
+    # def set_active_label(self, label_id):
+    #     sidebar = self.get_child().get_children()[0]
+    #     sidebar_top = sidebar.get_children()[0]
+
+    #     for child in sidebar_top.get_children():
+    #         if isinstance(child, Gtk.EventBox):
+    #             child_label = child.get_children()[0]
+    #             if child_label.get_name() == label_id:
+    #                 child_label.set_name("active")
+    #             else:
+    #                 child_label.set_name("side_label")
+
+        
+    def set_active_label(self, active_section):
         sidebar = self.get_child().get_children()[0]
         sidebar_top = sidebar.get_children()[0]
 
         for child in sidebar_top.get_children():
             if isinstance(child, Gtk.EventBox):
-                if child.get_children()[0].get_name() == "active":
-                    child.get_children()[0].set_name("side_label")
-                    child.get_children()[0].get_style_context().remove_class("active")
-
-                for child in sidebar_top.get_children():
-                    if isinstance(child, Gtk.EventBox):
-                        if child.get_children()[0].get_name() == label_name:
-                            child.get_children()[0].set_name("active")
-                            child.get_children()[0].get_style_context().add_class("active")
-
-
+                child_label = child.get_children()[0]
+                if child_label.get_name() == active_section:
+                    child_label.set_name("active")
+                else:
+                    child_label.set_name("side_label")
