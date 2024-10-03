@@ -138,7 +138,7 @@ class ModemHandler:
 
                 messages.append(ret_message)
         
-        print(f"incoming messages here from new function: {messages}")
+        # print(f"incoming messages here from new function: {messages}")
 
         return messages
     
@@ -189,7 +189,7 @@ class ModemHandler:
 
                 messages.append(ret_message)
         
-        print(f"messages here outgoing: {messages}")
+        # print(f"messages here outgoing: {messages}")
 
         return messages
     
@@ -233,8 +233,8 @@ properties_list = handler.get_modem_properties(first_modem)
 
 # test_send = handler.send_messages(  "should delete","687022472", first_modem)
 # test_delete = handler.delete_message('13')
-test_load_incoming = handler.load_incoming(  first_modem)
-test_load_outgoing = handler.load_outgoing(  first_modem)
+# test_load_incoming = handler.load_incoming(  first_modem)
+# test_load_outgoing = handler.load_outgoing(  first_modem)
 
 
 
