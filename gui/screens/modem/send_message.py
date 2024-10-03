@@ -21,12 +21,26 @@ class SendMessageWindow(Gtk.Box):
         mainscrolledwindow = Gtk.ScrolledWindow()
         self.add(mainscrolledwindow) 
 
+        container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        container1.set_vexpand(True)
+        container1.set_homogeneous(False)
+        container1.set_border_width(10)
+        mainscrolledwindow.add(container1)
+
+        header = Gtk.Label()
+        header.set_text("Send Message")
+        header.set_name("header_label")
+        container1.pack_start(header, False, False, 0)
+
+
+
         # container main
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=1)
         container_main.set_halign(Gtk.Align.CENTER)
         container_main.set_name("center-box-send")
-        self.pack_start(container_main, False, False, 0)
-        mainscrolledwindow.add(container_main)
+        container1.pack_start(container_main, False, False, 0)
+
+
 
         # message label
         message_label = Gtk.Label()
