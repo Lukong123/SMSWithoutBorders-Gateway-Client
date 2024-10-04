@@ -219,12 +219,12 @@ class ModemHandler:
 
 
 
-# handler = ModemHandler()
-# handler.handle_modem_connected()
+handler = ModemHandler()
+handler.handle_modem_connected()
 
-# modem_names = handler.get_modem_names()
+modem_names = handler.get_modem_names()
 
-# first_modem = modem_names[0]
+first_modem = modem_names[0]
 # handler.enable_modem(first_modem)
 # # print("Properties for first modem:", handler.get_modem_properties(first_modem))
 # properties_list = handler.get_modem_properties(first_modem)
@@ -233,7 +233,7 @@ class ModemHandler:
 
 # test_send = handler.send_messages(  "should delete","687022472", first_modem)
 # test_delete = handler.delete_message('13')
-# test_load_incoming = handler.load_incoming(  first_modem)
+test_load_incoming = handler.load_incoming(  first_modem)
 # test_load_outgoing = handler.load_outgoing(  first_modem)
 
 

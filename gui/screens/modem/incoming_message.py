@@ -3,10 +3,13 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib
 
 import subprocess
+import threading
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
 from gui.screens.modem.send_message import SendMessageWindow
 from src.api_callbacks import ModemHandler
+from src.messaging import Messaging
+from src.main import Inbound
 
 
 class IncomingMessageWindow(Gtk.Box):
@@ -274,6 +277,24 @@ class IncomingMessageWindow(Gtk.Box):
         stack = modem_window.get_children()[0].get_children()[1] 
         stack.set_visible_child_name("send")
 
+    def new_message_handler(self,modem_name):
+        print("new message handler ")
+        print("new message handler ")
+        print("new message handler ")
+        print("new message handler ")
+        print("new message handler ")
+        print("new message handler ")
+
+        self.message_ui()
+        print("after new message handler message ui called")
+        print("after new message handler message ui called")
+        print("after new message handler message ui called")
+        print("after new message handler message ui called")
+        print("after new message handler message ui called")
+        print("after new message handler message ui called")
+
+
+
 
 
     def apply_css(self):
@@ -289,8 +310,14 @@ class IncomingMessageWindow(Gtk.Box):
 
 
         
-    # def run(self):
-    #     Gtk.main()
+    def run(self):
+
+        self.messaging = Messaging()
+        self.messaging.add_new_message_handler(self.new_message_handler)
+        
+        thread= threading.Thread(target=self.mm.daemon)
+        thread.start()
+        # Gtk.main()
 
 # if __name__ == "__main__":
 #     app = ModemWindow()
