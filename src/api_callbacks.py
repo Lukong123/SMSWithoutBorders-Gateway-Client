@@ -138,7 +138,7 @@ class ModemHandler:
 
                 messages.append(ret_message)
         
-        # print(f"incoming messages here from new function: {messages}")
+        print(f"incoming messages here from new function: {messages}")
 
         return messages
     
@@ -201,6 +201,18 @@ class ModemHandler:
             raise error
     
         return row_count
+    
+    def clearing_stack(self):
+        if self.messaging.clear_stack():
+
+            print("stack cleared")
+            print("stack cleared")
+        else:
+            print("not cleared")
+            print("not cleared")
+            print("not cleared")
+
+        
 
 
         
@@ -233,7 +245,10 @@ first_modem = modem_names[0]
 
 # test_send = handler.send_messages(  "should delete","687022472", first_modem)
 # test_delete = handler.delete_message('13')
-test_load_incoming = handler.load_incoming(  first_modem)
+# test_load_incoming = handler.load_incoming(  first_modem)
+handler.clearing_stack()
+# test_load_incoming = handler.load_incoming(  first_modem)
+
 # test_load_outgoing = handler.load_outgoing(  first_modem)
 
 
