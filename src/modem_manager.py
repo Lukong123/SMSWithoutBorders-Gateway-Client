@@ -183,6 +183,10 @@ class ModemManager:
         """
         self.modem_connected_handlers.append(modem_connected_handler)
 
+    def remove_modem_disconnected_handler(self, modem_disconnected_handler) -> None:
+        if modem_disconnected_handler in self.modem_connected_handlers:
+            self.modem_connected_handlers.remove(modem_disconnected_handler)
+
 
 if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')

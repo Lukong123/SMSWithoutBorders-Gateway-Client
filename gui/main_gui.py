@@ -166,12 +166,20 @@ class DekuLinux(Gtk.Window):
         self.update_modem_list()
         self.update_device_label()
 
+    def modem_removed_callback(self, modem):
+        print("modem callback here")
+        self.update_modem_list()
+        self.update_device_label()
+
 
     def run(self):
 
 
         self.mm = ModemManager()
         self.mm.add_modem_connected_handler(self.new_modem_callback)
+        # self.mm.modem_disconnected(self.modem_removed_callback)
+        # self.mm.add_modem_connected_handler(self.new_modem_callback)
+        self.mm.remove_modem_disconnected_handler(self.modem_removed_callback)
         thread= threading.Thread(target=self.mm.daemon)
         thread.start()
 
