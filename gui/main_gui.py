@@ -8,6 +8,8 @@ from gui.screens.modem.modem_window import ModemWindow
 
 from src.api_callbacks import ModemHandler
 from src.modem_manager import ModemManager
+from src.messaging import Messaging
+from src.modem import Modem
 
 
 class DekuLinux(Gtk.Window):
@@ -151,6 +153,10 @@ class DekuLinux(Gtk.Window):
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
         modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler)
+        self.messaging = Messaging(Modem(modem_name, mo))
+
+        self.messaging.add_new_message_handler(modem_window.new_msg_handler)
+        
         modem_window.show_all()
 
     def apply_css(self):
@@ -165,6 +171,8 @@ class DekuLinux(Gtk.Window):
         print("new modem callback here")
         self.update_modem_list()
         self.update_device_label()
+        
+
 
     def modem_removed_callback(self, modem):
         print("modem callback here")
@@ -179,6 +187,9 @@ class DekuLinux(Gtk.Window):
         self.mm.add_modem_connected_handler(self.new_modem_callback)
         # self.mm.modem_disconnected(self.modem_removed_callback)
         # self.mm.add_modem_connected_handler(self.new_modem_callback)
+
+        
+
         self.mm.remove_modem_disconnected_handler(self.modem_removed_callback)
         thread= threading.Thread(target=self.mm.daemon)
         thread.start()

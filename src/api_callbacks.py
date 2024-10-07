@@ -1,5 +1,6 @@
 import logging
 import time
+import datetime
 
 from src.modem_manager import ModemManager
 from src.modem import Modem
@@ -124,6 +125,7 @@ class ModemHandler:
             raise error
 
         else:
+            stored_messages = sorted(stored_messages, key=lambda x: x[4], reverse=True)
             for message in stored_messages:
                 ret_message = {}
                 ret_message['id'] = message[0]
@@ -180,7 +182,14 @@ class ModemHandler:
                 ret_message['id'] = message[0]
                 ret_message['text'] = message[2]
                 ret_message['number'] = message[3]
-                ret_message['timestamp'] = message[4]
+                # ret_message['timestamp'] = message[4]
+                timestamp_unix = float(message[4])
+                timestamp_seconds = timestamp_unix // 1000  # Convert milliseconds to seconds
+                timestamp_ms = timestamp_unix % 1000  # Extract milliseconds
+                # timestamp_dt = datetime.datetime.fromtimestamp(timestamp_seconds) + datetime.timedelta(milliseconds=timestamp_ms)
+                timestamp_dt = datetime.datetime.utcfromtimestamp(timestamp_seconds) + datetime.timedelta(milliseconds=timestamp_ms)
+                ret_message['timestamp'] = timestamp_dt.strftime('%Y-%m-%d %H:%M:%S.%f')
+    
                 ret_message['date_stored'] = message[5]
                 ret_message['type'] = message[6]
                 # ret_message['status'] = message[7]
@@ -203,6 +212,7 @@ class ModemHandler:
         return row_count
     
     def clearing_stack(self):
+        # Put in an exception and print the exceptions
         if self.messaging.clear_stack():
 
             print("stack cleared")

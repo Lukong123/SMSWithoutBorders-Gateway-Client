@@ -13,7 +13,7 @@ from src.main import Inbound
 
 
 class IncomingMessageWindow(Gtk.Box):
-    def __init__(self, incoming_messages, modem_name, modem_handler):
+    def __init__(self, modem_name, modem_handler):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
@@ -24,7 +24,8 @@ class IncomingMessageWindow(Gtk.Box):
         self.modem_name = modem_name
         
         self.modem_handler.handle_modem_connected()
-        self.incoming_messages = self.modem_handler.load_incoming(modem_name)
+        # self.incoming_messages = self.modem_handler.load_incoming(modem_name)
+        self.incoming_messages = []
         self.container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         self.popover= Gtk.Popover.new(self)
         self.popover.set_position(Gtk.PositionType.TOP)
@@ -310,14 +311,7 @@ class IncomingMessageWindow(Gtk.Box):
 
 
         
-    def run(self):
 
-        self.messaging = Messaging()
-        self.messaging.add_new_message_handler(self.new_message_handler)
-        
-        thread= threading.Thread(target=self.mm.daemon)
-        thread.start()
-        # Gtk.main()
 
 # if __name__ == "__main__":
 #     app = ModemWindow()

@@ -15,6 +15,7 @@ from gui.screens.modem.export_message import ExportMessageWindow
 from gui.screens.modem.about import AboutWindow
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from src.messaging import Messaging
 
 class ModemWindow(Gtk.Window):
     def __init__(self, modem_properties, modem_name, modem_path, modem_handler):
@@ -193,6 +194,17 @@ class ModemWindow(Gtk.Window):
 
         self.initialize_views(stack)
 
+
+    def new_msg_handler(self, message:Messaging, sim_imsi):
+        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
+        self.incoming_view.new_message_handler(self.modem_name)
+        # staadd_named(self.incoming_view, "incoming")
+
+
+        
+
+
+
     def initialize_views(self, stack):
 
         # home modem view
@@ -204,8 +216,8 @@ class ModemWindow(Gtk.Window):
         stack.add_named(send_view, "send")
 
         # incoming view
-        incoming_view = IncomingMessageWindow(self.incoming_messages, self.modem_name, self.modem_handler)
-        stack.add_named(incoming_view, "incoming")
+        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
+        stack.add_named(self.incoming_view, "incoming")
 
         # outgoing view
         outgoing_view = OutgoingMessageWindow(self.outgoing_messages, self.modem_name, self.modem_handler)
