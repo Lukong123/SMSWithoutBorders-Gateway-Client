@@ -4,7 +4,6 @@ from gi.repository import Gtk, Gdk, Pango
 from gui.utils.widgets.horizontal_line import HorizontalLine
 
 from src.api_callbacks import ModemHandler
-from gui.screens.modem.outgoing_message import OutgoingMessageWindow
 
 
 class SendMessageWindow(Gtk.Box):
@@ -18,8 +17,6 @@ class SendMessageWindow(Gtk.Box):
         # self.handler = ModemHandler()
         self.modem_handler = modem_handler
         self.modem_name = modem_name
-        self.outgoing_message = OutgoingMessageWindow(outgoing_messages=[], modem_name=modem_name, modem_handler=modem_handler)
-
 
         mainscrolledwindow = Gtk.ScrolledWindow()
         self.add(mainscrolledwindow) 
@@ -123,51 +120,6 @@ class SendMessageWindow(Gtk.Box):
         print(f"text buffer context {text}")
         print(f"number buffer context {number}")
         print(f"  result type {type(result)}")
-        print(f"  result  {result}")
-        self.modem_handler.load_outgoing(self.modem_name)
-        print("above the self.load way")
-        self.outgoing_message.reload_outgoing_messages()
-        print("after the reload")
-
-
-
-        if result:
-            # self.modem_handler.load_outgoing(self.modem_name)
-            self.outgoing_message.message_ui()
-            # OutgoingMessageWindow.reload_outgoing_messages()
-            # self.outgoing_message_window.
-
-            print("outgoing loaded done")
-        else:
-            print("outgoing loaded undone")
-
-
-def on_send_button_clicked(self, widget):
-    text_buffer = self.textview.get_buffer()
-    text_start_iter = text_buffer.get_start_iter()
-    text_end_iter = text_buffer.get_end_iter()
-    text = text_buffer.get_text(text_start_iter, text_end_iter, True)
-    number = self.number_entry.get_text()
-
-    result = self.modem_handler.send_messages(text, number, self.modem_name)
-    print(f"after the result {result}")
-    print(f"text buffer context {text}")
-    print(f"number buffer context {number}")
-    print(f"result type {type(result)}")
-    print(f"result {result}")
-
-    if result is not None:
-        self.modem_handler.load_outgoing(self.modem_name)
-        print("above the self.load way")
-        self.outgoing_message.reload_outgoing_messages()
-        print("after the reload")
-
-        # You may need to adjust this part based on your OutgoingMessageWindow class
-        self.outgoing_message.message_ui()
-        print("outgoing loaded done")
-    else:
-        print("outgoing loaded undone")
-
 
 
     def apply_css(self):
