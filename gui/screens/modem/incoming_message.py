@@ -24,8 +24,8 @@ class IncomingMessageWindow(Gtk.Box):
         self.modem_name = modem_name
         
         self.modem_handler.handle_modem_connected()
-        # self.incoming_messages = self.modem_handler.load_incoming(modem_name)
-        self.incoming_messages = []
+        self.incoming_messages = self.modem_handler.load_incoming(modem_name)
+        # self.incoming_messages = []
         self.container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         self.popover= Gtk.Popover.new(self)
         self.popover.set_position(Gtk.PositionType.TOP)
@@ -313,6 +313,11 @@ class IncomingMessageWindow(Gtk.Box):
         
 
 
-# if __name__ == "__main__":
-#     app = ModemWindow()
-#     app.run()
+# # if __name__ == "__main__":
+# #     app = ModemWindow()
+# #     app.run()
+
+
+
+    # def run(self):
+    #     Gtk.main()

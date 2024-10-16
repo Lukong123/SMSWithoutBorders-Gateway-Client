@@ -121,6 +121,7 @@ class DekuLinux(Gtk.Window):
         modem_paths = self.modem_handler.get_modem_path()
         print("Updating device labels after callback...")
         print("Modem list length:", len(modem_names))
+        print("modem path", modem_paths)
 
 
         self.modem_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -149,11 +150,25 @@ class DekuLinux(Gtk.Window):
     def on_modem_click(self, widget, event, modem_name, modem_path):
         print(f"Modem {modem_name} clicked!")
         # modem_handler = ModemHandler()
+
+
+
+        
+
         self.modem_handler.handle_modem_connected()
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
         modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler)
+        mm=ModemManager()
+        mm.list_modems() # why this?
+
+        modem = mm.get_modem(modem_path)
+
+        
+
         # self.messaging = Messaging(Modem(modem_name, mo))
+        self.messaging = Messaging(modem)
+        print("self.messaging", self.messaging)
 
         # self.messaging.add_new_message_handler(modem_window.new_msg_handler)
         

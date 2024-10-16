@@ -18,7 +18,7 @@ class SendMessageWindow(Gtk.Box):
         # self.handler = ModemHandler()
         self.modem_handler = modem_handler
         self.modem_name = modem_name
-        self.outgoing_message = OutgoingMessageWindow(outgoing_messages=[], modem_name=modem_name, modem_handler=modem_handler)
+        self.outgoing_message = OutgoingMessageWindow( modem_name=modem_name, modem_handler=modem_handler)
 
         mainscrolledwindow = Gtk.ScrolledWindow()
         self.add(mainscrolledwindow) 
@@ -132,6 +132,12 @@ class SendMessageWindow(Gtk.Box):
 
         self.show_message_sent_popover()
         self.reload_send_ui()
+
+
+        # OutgoingMessageWindow.reload_outgoing_messages()
+        outgoing_message_window = OutgoingMessageWindow( self.modem_name, self.modem_handler)
+        outgoing_message_window.reload_outgoing_messages()
+
 
         # GLib.idle_add(self.reload_send_ui())
 

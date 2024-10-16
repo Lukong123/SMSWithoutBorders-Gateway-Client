@@ -9,7 +9,7 @@ from src.api_callbacks import ModemHandler
 
 
 class OutgoingMessageWindow(Gtk.Box):
-    def __init__(self, outgoing_messages, modem_name, modem_handler):
+    def __init__(self, modem_name, modem_handler):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
@@ -209,6 +209,18 @@ class OutgoingMessageWindow(Gtk.Box):
         self.outgoing_messages = self.modem_handler.load_outgoing(self.modem_name)
         self.container_main.foreach(Gtk.Widget.destroy) 
         self.message_ui()
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+        print("called")
+
+        
+
 
        
     def on_fab_button_clicked(self, button):

@@ -220,7 +220,7 @@ class ModemWindow(Gtk.Window):
         stack.add_named(self.incoming_view, "incoming")
 
         # outgoing view
-        outgoing_view = OutgoingMessageWindow(self.outgoing_messages, self.modem_name, self.modem_handler)
+        outgoing_view = OutgoingMessageWindow( self.modem_name, self.modem_handler)
         stack.add_named(outgoing_view, "outgoing")
 
         # failed view
