@@ -195,9 +195,9 @@ class ModemWindow(Gtk.Window):
         self.initialize_views(stack)
 
 
-    def new_msg_handler(self, message:Messaging, sim_imsi):
-        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
-        self.incoming_view.new_message_handler(self.modem_name)
+    # def new_msg_handler(self, message:Messaging, sim_imsi):
+        # self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
+        # self.incoming_view.new_message_handler(self.modem_name)
         # staadd_named(self.incoming_view, "incoming")
 
 

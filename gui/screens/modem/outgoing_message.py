@@ -149,7 +149,7 @@ class OutgoingMessageWindow(Gtk.Box):
             row2.pack_start(left_box2, False, False, 0)
 
             message_label = Gtk.Label()
-            message_label.set_text(text_value)
+            message_label.set_text(str(text_value))
             message_label.set_name("message-label")
             left_box2.pack_start(message_label, False, False, 20)
 

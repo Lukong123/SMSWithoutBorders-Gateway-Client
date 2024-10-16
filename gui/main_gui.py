@@ -153,9 +153,9 @@ class DekuLinux(Gtk.Window):
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
         modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler)
-        self.messaging = Messaging(Modem(modem_name, mo))
+        # self.messaging = Messaging(Modem(modem_name, mo))
 
-        self.messaging.add_new_message_handler(modem_window.new_msg_handler)
+        # self.messaging.add_new_message_handler(modem_window.new_msg_handler)
         
         modem_window.show_all()
 
