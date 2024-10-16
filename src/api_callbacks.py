@@ -1,3 +1,4 @@
+import base64
 import logging
 import time
 import datetime
@@ -9,6 +10,25 @@ from src.sms import SMS
 from src.api import get_messages, send_sms
 from src.inbound import new_message_handler
 from src.message_store import MessageStore
+from src.ratchet import Ratchets
+
+from smswithoutborders_libsig.protocols import (
+    States,
+    HEADERS,
+    GENERATE_DH,
+    DH,
+    KDF_CK,
+    KDF_RK,
+    ENCRYPT,
+    DECRYPT,
+    CONCAT,
+    DHRatchet,
+)
+
+from smswithoutborders_libsig.keypairs import Keypairs, x25519
+
+
+
 
 
 class ModemHandler:
@@ -140,7 +160,7 @@ class ModemHandler:
 
                 messages.append(ret_message)
         
-        print(f"incoming messages here from new function: {messages}")
+        # print(f"incoming messages here from new function: {messages}")
 
         return messages
     
@@ -148,7 +168,33 @@ class ModemHandler:
     def send_messages(self,  text: str, number: str, modem_imsi ):
         try:
 
-            # modem = modem_manager.get_modem(modem_path)
+            # # modem = modem_manager.get_modem(modem_path)
+            # alice = x25519("alice_keys.db")
+            # alice_public_key_original = alice.init()
+
+            # bob = x25519("bob_keys.db")
+            # bob_public_key_original = bob.init()
+
+            # SK = alice.agree(bob_public_key_original)
+            # SK1 = bob.agree(alice_public_key_original)
+            # # original_plaintext = b"Sending double ratchet messsage"
+
+            # alice_state = States()
+            # text_base64 = base64.b64encode(text.encode('utf-8'))
+
+            # Ratchets.alice_init(
+            #     alice_state, SK, bob_public_key_original, "alice_keys"
+            # )
+            # header, alice_ciphertext = Ratchets.encrypt(
+            #     state=alice_state,
+            #      data=text_base64, AD=bob_public_key_original
+            # )
+
+            # print(f"alice cipher text: {alice_ciphertext}")
+
+
+            # s_header = header.serialize()
+            # a_header1 = HEADERS.deserialize(s_header)
 
             timestamp = time.time()
 
