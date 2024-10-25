@@ -170,7 +170,7 @@ class DekuLinux(Gtk.Window):
         self.messaging = Messaging(modem)
         print("self.messaging", self.messaging)
 
-        # self.messaging.add_new_message_handler(modem_window.new_msg_handler)
+        self.messaging.add_new_message_handler(modem_window.new_msg_handler)
         
         modem_window.show_all()
 
@@ -205,7 +205,7 @@ class DekuLinux(Gtk.Window):
 
         
 
-        self.mm.remove_modem_disconnected_handler(self.modem_removed_callback)
+        # self.mm.remove_modem_disconnected_handler(self.modem_removed_callback)
         thread= threading.Thread(target=self.mm.daemon)
         thread.start()
 
