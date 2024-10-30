@@ -1,6 +1,7 @@
 import gi
+import os
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from gui.utils.widgets.horizontal_line import HorizontalLine
 
 from src.api_callbacks import ModemHandler
@@ -33,6 +34,44 @@ class SendMessageWindow(Gtk.Box):
         self.popover.add(popover_label)
 
         mainscrolledwindow.add(self.container1)
+    
+        # Create the navigation bar
+        nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        nav_bar.set_size_request(-1, 50)
+        nav_bar.set_homogeneous(False)
+        # nav_bar.set_border_width(10)
+        nav_bar.set_name("nav-bar")
+        self.container1.pack_start(nav_bar, False, False, 0)
+
+        # Create a box for the left side of the navigation bar
+        left_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        left_box.set_homogeneous(True)
+        nav_bar.pack_start(left_box, False, False, 0)
+
+        title_label = Gtk.Label()
+        title_label.set_text("Deku Linux")
+        title_label.set_name("title-label") 
+        left_box.pack_start(title_label, False, False, 20)
+
+        right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        right_box.set_homogeneous(True)
+        nav_bar.pack_end(right_box, False, False, 0)
+
+        image_file = "../../utils/icons/dots.png"
+        image_path = self.get_resource_path(image_file)
+
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+            filename=image_path,
+            width=15,
+            height=15,
+            preserve_aspect_ratio=True
+        )
+
+
+        image = Gtk.Image.new_from_pixbuf(pixbuf)
+
+        right_box.pack_end(image, False, False, 20)
+
 
         header = Gtk.Label()
         header.set_text("Send Message")
@@ -161,6 +200,34 @@ class SendMessageWindow(Gtk.Box):
         screen = Gdk.Screen.get_default()
         style_context = self.get_style_context()
         style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+    
+
+
+    def get_resource_path(self, rel_path):
+        dir_of_py_file = os.path.dirname(__file__)
+        rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+        print(f"rel path {rel_path_to_resource}")
+
+        abs_path_to_resource = os.path.abspath(rel_path_to_resource)
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+        print(f'abs path {abs_path_to_resource}')
+
+        return abs_path_to_resource
 
     # def onFocusIn(self, event):
     #     if (textbuf.get_text(textbuf.get_start_iter(), textbuf.get_end_iter(), True) == placeholderStr):
