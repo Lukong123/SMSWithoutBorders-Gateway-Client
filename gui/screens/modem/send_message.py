@@ -70,8 +70,36 @@ class SendMessageWindow(Gtk.Box):
 
         image = Gtk.Image.new_from_pixbuf(pixbuf)
 
+
         right_box.pack_end(image, False, False, 20)
 
+
+        main_menu_bar = Gtk.MenuBar()
+
+        other_menu = Gtk.Menu()
+        other_menu_drop_down = Gtk.MenuItem("Others")
+
+        other_secure = Gtk.MenuItem("Secure")
+        other_search = Gtk.MenuItem("Search")
+        other_mute = Gtk.MenuItem("Mute")
+        other_block = Gtk.MenuItem("Block")
+        other_delete = Gtk.MenuItem("Delete")
+
+        other_secure.connect("activate", self.on_secure_clicked)
+
+
+        other_menu_drop_down.set_submenu(other_menu)
+        other_menu.append(other_secure)
+        other_menu.append(other_search)
+        other_menu.append(other_mute)
+        other_menu.append(other_block)
+        other_menu.append(other_delete)
+
+        main_menu_bar.append(other_menu_drop_down)
+
+
+
+        right_box.pack_end(main_menu_bar, False, False, 20)
 
         header = Gtk.Label()
         header.set_text("Send Message")
@@ -187,7 +215,6 @@ class SendMessageWindow(Gtk.Box):
             print("above the self.load way")
             self.outgoing_message.reload_outgoing_messages()
             print("after the reload")
-            # You may need to adjust this part based on your OutgoingMessageWindow class
             self.outgoing_message.message_ui()
             print("outgoing loaded done")
         else:
@@ -206,38 +233,37 @@ class SendMessageWindow(Gtk.Box):
     def get_resource_path(self, rel_path):
         dir_of_py_file = os.path.dirname(__file__)
         rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-        print(f"rel path {rel_path_to_resource}")
-
         abs_path_to_resource = os.path.abspath(rel_path_to_resource)
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-        print(f'abs path {abs_path_to_resource}')
-
         return abs_path_to_resource
 
-    # def onFocusIn(self, event):
-    #     if (textbuf.get_text(textbuf.get_start_iter(), textbuf.get_end_iter(), True) == placeholderStr):
-    #         textbuf.set_text("")
-    #     return False
+    def on_secure_clicked(self, widget):
+        dialog = SecurePopUp(self)
+        response = dialog.run()
 
+        if response == Gtk.ResponseType.OK:
+            print("ok button clikc")
+        elif response == Gtk.ResponseType.CANCEL:
+            print("cancel button clikc")
 
-    # def onFocusOut(self, event):
-    #     if (textbuf.get_text(textbuf.get_start_iter(), textbuf.get_end_iter(), True) == ""):
-    #         textbuf.set_text(placeholderStr)
-    #     return False
-
+        dialog.destroy()
    
+class SecurePopUp(Gtk.Dialog):
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Enable Secure Connection", Gtk.DialogFlags.MODAL, parent=None)
+
+        self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+
+        self.set_default_size(200, 100)
+        self.set_border_width(30)
+
+        box= Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        label = Gtk.Label("Are you sure you want to request secure connection?")
+        box.pack_start(label, True, True, 10)
+        area = self.get_content_area()
+        area.add(box)
+
+        area = self.get_content_area()
+        action_area = self.get_action_area()
+        action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+        self.show_all()
