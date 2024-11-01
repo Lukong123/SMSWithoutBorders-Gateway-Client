@@ -22,11 +22,11 @@ class MessageForwardingWindow(Gtk.Box):
         container1.set_border_width(10)
         self.pack_start(container1, True, True, 0)
 
+
         # Create the navigation bar
         nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         nav_bar.set_size_request(-1, 50)
         nav_bar.set_homogeneous(False)
-        # nav_bar.set_border_width(10)
         nav_bar.set_name("nav-bar")
         container1.pack_start(nav_bar, False, False, 0)
 
@@ -40,13 +40,48 @@ class MessageForwardingWindow(Gtk.Box):
         title_label.set_name("title-label") 
         left_box.pack_start(title_label, False, False, 20)
 
+        # Create a box for the right side of the navigation bar
         right_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         right_box.set_homogeneous(True)
         nav_bar.pack_end(right_box, False, False, 0)
 
+        # Create a MenuButton with an icon
+        nav_icon_button = Gtk.Button()
+        nav_icon_button.set_name("nav-icon-button")
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        nav_icon_button.set_image(nav_icon)
+
+        
         right_box.pack_end(nav_icon, False, False, 20)
 
+        nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        icon_evnet_box = Gtk.EventBox()
+        icon_evnet_box.add(nav_icon)
+        right_box.pack_end(icon_evnet_box, False, False, 20)
+
+        menu = Gtk.Menu()
+        view_gateway_servers = Gtk.MenuItem(label="View GatewayServers")
+        settings = Gtk.MenuItem(label="Settings")
+      
+        menu.append(view_gateway_servers)
+        menu.append(settings)
+        menu.show_all()
+
+        def on_menu_item_clicked(widget, label):
+            print(f"{label} clicked")
+
+        # Connect items to callback with a label
+        view_gateway_servers.connect("activate", on_menu_item_clicked, "Option 2")
+        settings.connect("activate", on_menu_item_clicked, "Option 3")
+
+
+        # Connect the click event on the image to show the menu
+        def on_icon_clicked(widget, event):
+            if event.button == 1:  # Left-click
+                menu.popup(None, None, None, None, event.button, event.time)
+
+        icon_evnet_box.connect("button-press-event", on_icon_clicked)
+        
 
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         container_main.set_halign(Gtk.Align.CENTER)
