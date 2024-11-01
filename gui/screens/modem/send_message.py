@@ -57,7 +57,8 @@ class SendMessageWindow(Gtk.Box):
         right_box.set_homogeneous(True)
         nav_bar.pack_end(right_box, False, False, 0)
 
-        image_file = "../../utils/icons/dots.png"
+
+        image_file = "../../utils/icons/elipsis-vertical.svg"
         image_path = self.get_resource_path(image_file)
 
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -66,40 +67,70 @@ class SendMessageWindow(Gtk.Box):
             height=15,
             preserve_aspect_ratio=True
         )
-
-
         image = Gtk.Image.new_from_pixbuf(pixbuf)
 
+        image_event_box = Gtk.EventBox()
+        image_event_box.add(image)
+        right_box.pack_end(image_event_box, False, False, 20)
 
-        right_box.pack_end(image, False, False, 20)
+        menu = Gtk.Menu()
+        secure = Gtk.MenuItem(label="Secure")
+        search = Gtk.MenuItem(label="Search")
+        block = Gtk.MenuItem(label="Block")
+        delete = Gtk.MenuItem(label="Delete")
 
+        menu.append(secure)
+        menu.append(search)
+        menu.append(block)
+        menu.append(delete)
 
-        main_menu_bar = Gtk.MenuBar()
+        menu.show_all()
 
-        other_menu = Gtk.Menu()
-        other_menu_drop_down = Gtk.MenuItem("Others")
+        def on_menu_item_clicked(widget, label):
+            print(f"{label} clicked")
 
-        other_secure = Gtk.MenuItem("Secure")
-        other_search = Gtk.MenuItem("Search")
-        other_mute = Gtk.MenuItem("Mute")
-        other_block = Gtk.MenuItem("Block")
-        other_delete = Gtk.MenuItem("Delete")
-
-        other_secure.connect("activate", self.on_secure_clicked)
-
-
-        other_menu_drop_down.set_submenu(other_menu)
-        other_menu.append(other_secure)
-        other_menu.append(other_search)
-        other_menu.append(other_mute)
-        other_menu.append(other_block)
-        other_menu.append(other_delete)
-
-        main_menu_bar.append(other_menu_drop_down)
-
+        # Connect items to callback with a label
+        secure.connect("activate", self.on_secure_clicked)
+        search.connect("activate", on_menu_item_clicked, "Option 2")
+        block.connect("activate", on_menu_item_clicked, "Option 3")
+        delete.connect("activate", on_menu_item_clicked, "Option 3")
 
 
-        right_box.pack_end(main_menu_bar, False, False, 20)
+        # Connect the click event on the image to show the menu
+        def on_image_clicked(widget, event):
+            if event.button == 1:  # Left-click
+                menu.popup(None, None, None, None, event.button, event.time)
+
+        image_event_box.connect("button-press-event", on_image_clicked)
+
+
+
+        # main_menu_bar = Gtk.MenuBar()
+
+        # other_menu = Gtk.Menu()
+        # other_menu_drop_down = Gtk.MenuItem("Others")
+
+        # other_secure = Gtk.MenuItem("Secure")
+        # other_search = Gtk.MenuItem("Search")
+        # other_mute = Gtk.MenuItem("Mute")
+        # other_block = Gtk.MenuItem("Block")
+        # other_delete = Gtk.MenuItem("Delete")
+
+        # other_secure.connect("activate", self.on_secure_clicked)
+
+
+        # other_menu_drop_down.set_submenu(other_menu)
+        # other_menu.append(other_secure)
+        # other_menu.append(other_search)
+        # other_menu.append(other_mute)
+        # other_menu.append(other_block)
+        # other_menu.append(other_delete)
+
+        # main_menu_bar.append(other_menu_drop_down)
+
+
+
+        # right_box.pack_end(main_menu_bar, False, False, 20)
 
         header = Gtk.Label()
         header.set_text("Send Message")
