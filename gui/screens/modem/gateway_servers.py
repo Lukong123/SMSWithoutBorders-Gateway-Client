@@ -6,18 +6,15 @@ import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
 from gui.screens.modem.send_message import SendMessageWindow
-from gui.screens.modem.gateway_servers import GateWayServersWindow
 
 
-class MessageForwardingWindow(Gtk.Box):
-    def __init__(self, stack):
+class GateWayServersWindow(Gtk.Box):
+    def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
-
-        self.stack = stack
         
         # Container 1
         container1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -64,19 +61,24 @@ class MessageForwardingWindow(Gtk.Box):
         right_box.pack_end(icon_evnet_box, False, False, 20)
 
         menu = Gtk.Menu()
-        view_gateway_servers = Gtk.MenuItem(label="View GatewayServers")
-        settings = Gtk.MenuItem(label="Settings")
-      
-        menu.append(view_gateway_servers)
-        menu.append(settings)
+        https = Gtk.MenuItem(label="Add HTTPS Gateway server")
+        smtp = Gtk.MenuItem(label="Add SMTP Gateway server")
+        ftp = Gtk.MenuItem(label="Add FTP Gateway server")
+
+        menu.append(https)
+        menu.append(smtp)
+        menu.append(ftp)
+
         menu.show_all()
 
         def on_menu_item_clicked(widget, label):
             print(f"{label} clicked")
 
         # Connect items to callback with a label
-        view_gateway_servers.connect("activate", self.on_view_gateway_servers_clicked)
-        settings.connect("activate", self.on_settings_clicked)
+        https.connect("activate", on_menu_item_clicked, "opt 1")
+        smtp.connect("activate", self.on_settings_clicked)
+        ftp.connect("activate", self.on_settings_clicked)
+
 
 
         # Connect the click event on the image to show the menu
@@ -102,7 +104,7 @@ class MessageForwardingWindow(Gtk.Box):
         container_main.pack_start(center_container, False, False, 0)
 
         message_label = Gtk.Label()
-        message_label.set_text("No routed message to show!")
+        message_label.set_text("No routed gateways!")
         message_label.set_name("message-label-fwd")
         center_container.pack_start(message_label, False, False, 20)
 
@@ -156,18 +158,8 @@ class MessageForwardingWindow(Gtk.Box):
         
     def run(self):
         Gtk.main()
-        
-    def on_view_gateway_servers_clicked(self, widget):
-        # Check if the 'gateway_servers' window is already in the stack
-        existing_child = self.stack.get_child_by_name("gateway_servers")
-        
-        # If not already added, create and add the new window
-        if existing_child is None:
-            gateway_servers_window = GateWayServersWindow()
-            self.stack.add_named(gateway_servers_window, "gateway_servers")
-        
-        # Set 'gateway_servers' as the visible child in the stack
-        self.stack.set_visible_child_name("gateway_servers")
+
+
 
     def on_settings_clicked(self, widget):
         dialog = SettingsPopUp(self)
