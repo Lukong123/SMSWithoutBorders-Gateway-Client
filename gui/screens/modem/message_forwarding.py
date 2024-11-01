@@ -59,9 +59,9 @@ class MessageForwardingWindow(Gtk.Box):
         right_box.pack_end(nav_icon, False, False, 20)
 
         nav_icon = Gtk.Image.new_from_icon_name("preferences-system-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
-        icon_evnet_box = Gtk.EventBox()
-        icon_evnet_box.add(nav_icon)
-        right_box.pack_end(icon_evnet_box, False, False, 20)
+        icon_event_box = Gtk.EventBox()
+        icon_event_box.add(nav_icon)
+        right_box.pack_end(icon_event_box, False, False, 20)
 
         menu = Gtk.Menu()
         view_gateway_servers = Gtk.MenuItem(label="View GatewayServers")
@@ -84,7 +84,7 @@ class MessageForwardingWindow(Gtk.Box):
             if event.button == 1:  # Left-click
                 menu.popup(None, None, None, None, event.button, event.time)
 
-        icon_evnet_box.connect("button-press-event", on_icon_clicked)
+        icon_event_box.connect("button-press-event", on_icon_clicked)
         
 
         container_main = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -156,7 +156,7 @@ class MessageForwardingWindow(Gtk.Box):
         
     def run(self):
         Gtk.main()
-        
+
     def on_view_gateway_servers_clicked(self, widget):
         # Check if the 'gateway_servers' window is already in the stack
         existing_child = self.stack.get_child_by_name("gateway_servers")
