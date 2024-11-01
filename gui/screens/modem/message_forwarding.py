@@ -5,6 +5,7 @@ from gi.repository import Gtk, Gdk
 import subprocess
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
+from gui.screens.modem.send_message import SendMessageWindow
 
 
 class MessageForwardingWindow(Gtk.Box):
@@ -71,8 +72,8 @@ class MessageForwardingWindow(Gtk.Box):
             print(f"{label} clicked")
 
         # Connect items to callback with a label
-        view_gateway_servers.connect("activate", on_menu_item_clicked, "Option 2")
-        settings.connect("activate", on_menu_item_clicked, "Option 3")
+        view_gateway_servers.connect("activate", on_menu_item_clicked, "opt 1")
+        settings.connect("activate", self.on_settings_clicked)
 
 
         # Connect the click event on the image to show the menu
@@ -153,6 +154,46 @@ class MessageForwardingWindow(Gtk.Box):
     def run(self):
         Gtk.main()
 
-if __name__ == "__main__":
-    app = ModemWindow()
-    app.run()
+
+
+    def on_settings_clicked(self, widget):
+        dialog = SettingsPopUp(self)
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            print("ok button clikc")
+        elif response == Gtk.ResponseType.CANCEL:
+            print("cancel button clikc")
+
+        dialog.destroy()
+   
+class SettingsPopUp(Gtk.Dialog):
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Gateway Server Settings", Gtk.DialogFlags.MODAL, parent=None)
+
+        self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+
+        self.set_default_size(200, 100)
+        self.set_border_width(30)
+
+        box= Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        label_heading = Gtk.Label("Enable Automatic Protocol Routing")
+        label_heading.set_name("label_heading")
+        box.pack_start(label_heading, True, True, 10)
+        label_body = Gtk.Label()
+        label_body.set_text("Turn this on by clicking OK to route only to 1 protocol at a time."
+                            " This begins with HTTP and performs a round-robin lookup for the other protocls.\n"
+                            " \n Use this to avoid receiving the same message to multiple protocols.")
+        box.pack_start(label_body, True, True, 20)
+        area = self.get_content_area()
+        area.add(box)
+
+        area = self.get_content_area()
+        action_area = self.get_action_area()
+        action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+        self.show_all()
+
+# if __name__ == "__main__":
+#     app = ModemWindow()
+#     app.run()
