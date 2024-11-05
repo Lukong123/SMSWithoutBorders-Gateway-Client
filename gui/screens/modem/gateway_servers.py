@@ -232,9 +232,17 @@ class HttpsPopUp(Gtk.Dialog):
         # Create the main box for the dialog
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
+        url_label = Gtk.Label("URL")
+        url_label.set_xalign(0)
+        box.pack_start(url_label, True, True, 5)
+
         self.url_entry = Gtk.Entry()
         self.url_entry.set_placeholder_text("Enter URL - e.g. https://example.com")
         box.pack_start(self.url_entry, True, True, 0)
+
+        optional_identifier_label = Gtk.Label("Identifier Tag")
+        optional_identifier_label.set_xalign(0)
+        box.pack_start(optional_identifier_label, True, True, 5)
 
         self.optional_identifier_entry = Gtk.Entry()
         self.optional_identifier_entry.set_placeholder_text("(Optional) Identifier Tag")
@@ -281,31 +289,50 @@ class SmtpPopUp(Gtk.Dialog):
         # Create the main box for the dialog
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
-        url_label = Gtk.Label("Enter URL")
-        box.pack_start(url_label, True, True, 5)
+        host_label = Gtk.Label("Host")
+        host_label.set_xalign(0)
+        box.pack_start(host_label, True, True, 5)
 
         self.host_entry = Gtk.Entry()
         self.host_entry.set_placeholder_text("Host")
         box.pack_start(self.host_entry, True, True, 0)
 
+        username_label = Gtk.Label("Username")
+        username_label.set_xalign(0)
+        box.pack_start(username_label, True, True, 5)
+
         self.username_entry = Gtk.Entry()
         self.username_entry.set_placeholder_text("Username")
         box.pack_start(self.username_entry, True, True, 0)
+
+        password_label = Gtk.Label("Password")
+        password_label.set_xalign(0)
+        box.pack_start(password_label, True, True, 5)
 
         self.password_entry = Gtk.Entry()
         self.password_entry.set_placeholder_text("Enter your password")
         self.password_entry.set_visibility(False)  # Password hidden by default
         box.pack_start(self.password_entry, True, True, 0)
 
+        port_label = Gtk.Label("Port")
+        port_label.set_xalign(0)
+        box.pack_start(port_label, True, True, 5)
 
         self.port_entry = Gtk.Entry()
         self.port_entry.set_placeholder_text("587")
         box.pack_start(self.port_entry, True, True, 0)
 
+        from_label = Gtk.Label("From...")
+        from_label.set_xalign(0)
+        box.pack_start(from_label, True, True, 5)
 
         self.from_entry = Gtk.Entry()
         self.from_entry.set_placeholder_text("From")
         box.pack_start(self.from_entry, True, True, 0)
+
+        recepient_label = Gtk.Label("Receipient")
+        recepient_label.set_xalign(0)
+        box.pack_start(recepient_label, True, True, 5)
 
         self.recepient_entry = Gtk.Entry()
         self.recepient_entry.set_placeholder_text("Recepient")
@@ -315,6 +342,10 @@ class SmtpPopUp(Gtk.Dialog):
                                "example@email.com, example1@email.com")
         box.pack_start(label_info, True, True, 10)
     
+
+        subject_label = Gtk.Label("Subject")
+        subject_label.set_xalign(0)
+        box.pack_start(subject_label, True, True, 5)
 
         self.subject_entry = Gtk.Entry()
         self.subject_entry.set_placeholder_text("(Optional) Subject")
@@ -337,6 +368,9 @@ class SmtpPopUp(Gtk.Dialog):
 
         # Add checkboxes box to the main box
         box.pack_start(checkbox_box, True, True, 10)
+        space_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        box.pack_start(space_box, True, True, 10)
+
 
         # Add the main box to the content area
         area = self.get_content_area()
@@ -361,13 +395,25 @@ class FtpPopUp(Gtk.Dialog):
         # Create the main box for the dialog
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
+        host_label = Gtk.Label("Host")
+        host_label.set_xalign(0)
+        box.pack_start(host_label, True, True, 5)
+
         self.host_entry = Gtk.Entry()
         self.host_entry.set_placeholder_text("Host")
         box.pack_start(self.host_entry, True, True, 0)
 
+        username_label = Gtk.Label("Username")
+        username_label.set_xalign(0)
+        box.pack_start(username_label, True, True, 5)
+
         self.username_entry = Gtk.Entry()
         self.username_entry.set_placeholder_text("Username")
         box.pack_start(self.username_entry, True, True, 0)
+
+        password_label = Gtk.Label("Password")
+        password_label.set_xalign(0)
+        box.pack_start(password_label, True, True, 5)
 
         self.password_entry = Gtk.Entry()
         self.password_entry.set_placeholder_text("Enter your password")
@@ -391,7 +437,8 @@ class FtpPopUp(Gtk.Dialog):
 
         # Add checkboxes box to the main box
         box.pack_start(checkbox_box, True, True, 10)
-
+        space_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        box.pack_start(space_box, True, True, 10)
         # Add the main box to the content area
         area = self.get_content_area()
         action_area = self.get_action_area()
