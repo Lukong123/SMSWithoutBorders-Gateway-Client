@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 from src.api_callbacks import ModemHandler
 
 
@@ -22,6 +22,7 @@ class ModemWindow(Gtk.Window):
         super().__init__(title="Deku Linux App")
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
+        self.messaging = None  
         # self.modem_handler = ModemHandler()
         self.modem_handler = modem_handler
         self.modem_handler.handle_modem_connected()
@@ -211,9 +212,21 @@ class ModemWindow(Gtk.Window):
         self.initialize_views()
 
 
-    def new_msg_handler(self, message:Messaging, sim_imsi):
-        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
-        self.incoming_view.new_message_handler(self.modem_name)
+    # def new_msg_handler(self, message, sim_imsi):
+    #     print(f"ModemWindow received new message for {self.modem_name}: {message}")
+        
+    #     # Pass the new message to IncomingMessageWindow
+    #     if self.incoming_view:
+    #         print("Passing message to IncomingMessageWindow...")
+    #         self.incoming_view.display_new_message(message)
+
+
+    def new_msg_handler(self, message, sim_imsi):
+        # Append only the new message to IncomingMessageWindow
+        print(f"New message received for {self.modem_name}: {message}")
+        if self.incoming_view:
+            # Use GLib.idle_add to ensure the UI is updated in the main thread
+            GLib.idle_add(self.incoming_view.display_all_messages, [message])
 
 
     def initialize_views(self):
@@ -271,9 +284,22 @@ class ModemWindow(Gtk.Window):
         self.stack.set_visible_child_name("send")
         self.set_active_label("send_label")
 
+    # def on_incoming_clicked(self, widget, event, *args):
+    #     self.stack.set_visible_child_name("incoming")
+    #     self.set_active_label("incoming_label")
+
     def on_incoming_clicked(self, widget, event, *args):
+        # Retrieve and display all messages when 'Incoming' is clicked
+        if self.messaging:
+            all_messages = self.messaging.messaging.List()  # Fetch all messages
+            print("Retrieved all messages:", all_messages)
+            self.incoming_view.display_all_messages(all_messages)
+        
+        # Switch to incoming view
         self.stack.set_visible_child_name("incoming")
-        self.set_active_label("incoming_label")
+        
+        # Switch to incoming view
+        self.stack.set_visible_child_name("incoming")
 
     def on_outgoing_clicked(self, widget, event, *args):
         self.stack.set_visible_child_name("outgoing")

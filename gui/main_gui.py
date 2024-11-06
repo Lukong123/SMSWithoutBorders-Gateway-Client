@@ -19,6 +19,7 @@ class DekuLinux(Gtk.Window):
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
         self.modem_handler = ModemHandler()
+        self.messaging = None
 
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -147,14 +148,11 @@ class DekuLinux(Gtk.Window):
 
         container2.show_all()
 
+
+    
+
     def on_modem_click(self, widget, event, modem_name, modem_path):
         print(f"Modem {modem_name} clicked!")
-        # modem_handler = ModemHandler()
-
-
-
-        
-
         self.modem_handler.handle_modem_connected()
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
@@ -164,13 +162,20 @@ class DekuLinux(Gtk.Window):
 
         modem = mm.get_modem(modem_path)
 
-        
-
         # self.messaging = Messaging(Modem(modem_name, mo))
         self.messaging = Messaging(modem)
         print("self.messaging", self.messaging)
+        print("available message", self.messaging.check_available_messages())
+        print(" message listing", self.messaging.messaging.List())
+        print(" message listing", self.messaging.messaging.List())
 
         self.messaging.add_new_message_handler(modem_window.new_msg_handler)
+        available_messages = self.messaging.check_available_messages()
+
+
+   
+
+        
         
         modem_window.show_all()
 
