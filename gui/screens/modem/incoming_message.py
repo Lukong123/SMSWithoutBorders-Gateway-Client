@@ -1,7 +1,7 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib
-
+from src.sms import SMS
 # import subprocess
 # import threading
 
@@ -389,33 +389,31 @@ class IncomingMessageWindow(Gtk.Box):
         self.set_halign(Gtk.Align.FILL)
         self.set_homogeneous(False)
         self.set_border_width(5)
-        
+
         self.modem_handler = modem_handler
         self.modem_name = modem_name
-        self.incoming_messages = []  # List to store message data
+        self.incoming_messages = []  # List to store message objects
 
-        # Create a scrollable area for the message display
+        # Create a scrollable area for displaying messages
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        # ListBox to hold each message as a row
+        # ListBox to hold each message in a row
         self.message_list = Gtk.ListBox()
         scrolled_window.add(self.message_list)
         self.pack_start(scrolled_window, True, True, 0)
 
     def display_all_messages(self, messages):
-        """Display an initial list of messages."""
-        print("Displaying initial list of all messages in IncomingMessageWindow...")
-        
-        # Add each message to the ListBox
+        """Append each new message to the ListBox."""
         for message in messages:
-            self.add_message_row(message)
-        
-        self.message_list.show_all()
+            # Assuming `message` is an instance of SMS and has relevant properties
+            message_text, sender_number, timestamp = message.new_received_message()
 
-    def add_message_row(self, message):
-        """Add a single message as a new row in the ListBox."""
-        row = Gtk.ListBoxRow()
-        label = Gtk.Label(label=message)
-        row.add(label)
-        self.message_list.add(row)
+            # Create a row for each message
+            row = Gtk.ListBoxRow()
+            label = Gtk.Label(label=f"From: {sender_number}\nTime: {timestamp}\nMessage: {message_text}")
+            row.add(label)
+            self.message_list.add(row)
+
+        # Show all rows
+        self.message_list.show_all()

@@ -16,6 +16,7 @@ from gui.screens.modem.about import AboutWindow
 
 from gui.utils.widgets.horizontal_line import HorizontalLine
 from src.messaging import Messaging
+from src.sms import SMS
 
 class ModemWindow(Gtk.Window):
     def __init__(self, modem_properties, modem_name, modem_path, modem_handler):
@@ -38,8 +39,6 @@ class ModemWindow(Gtk.Window):
         # Create the main container
         main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self.add(main_box)
-
-        
 
         # Create the sidebar
         sidebar = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -212,21 +211,16 @@ class ModemWindow(Gtk.Window):
         self.initialize_views()
 
 
-    # def new_msg_handler(self, message, sim_imsi):
-    #     print(f"ModemWindow received new message for {self.modem_name}: {message}")
-        
-    #     # Pass the new message to IncomingMessageWindow
-    #     if self.incoming_view:
-    #         print("Passing message to IncomingMessageWindow...")
-    #         self.incoming_view.display_new_message(message)
-
-
+ 
     def new_msg_handler(self, message, sim_imsi):
-        # Append only the new message to IncomingMessageWindow
+        """Callback method to handle new messages and update the UI."""
         print(f"New message received for {self.modem_name}: {message}")
+
+        # Append the new message to IncomingMessageWindow
         if self.incoming_view:
-            # Use GLib.idle_add to ensure the UI is updated in the main thread
+            # Use GLib.idle_add to ensure the UI updates on the main thread
             GLib.idle_add(self.incoming_view.display_all_messages, [message])
+
 
 
     def initialize_views(self):
