@@ -413,7 +413,8 @@ class IncomingMessageWindow(Gtk.Box):
             row = Gtk.ListBoxRow()
             label = Gtk.Label(label=f"From: {sender_number}\nTime: {timestamp}\nMessage: {message_text}")
             row.add(label)
-            self.message_list.add(row)
+            # self.message_list.add(row)
+            self.message_list.insert(row, 0)
 
         # Show all rows
         self.message_list.show_all()
