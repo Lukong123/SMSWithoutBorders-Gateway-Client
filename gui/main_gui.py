@@ -156,7 +156,7 @@ class DekuLinux(Gtk.Window):
         self.modem_handler.handle_modem_connected()
         self.modem_handler.enable_modem(modem_name)
         modem_properties = self.modem_handler.get_modem_properties(modem_name)
-        modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler)
+        modem_window = ModemWindow(modem_properties, modem_name, modem_path, self.modem_handler, self.messaging)
         mm=ModemManager()
         mm.list_modems() # why this?
 
@@ -171,6 +171,12 @@ class DekuLinux(Gtk.Window):
 
         self.messaging.add_new_message_handler(modem_window.new_msg_handler)
         available_messages = self.messaging.check_available_messages()
+        print(f"available message : {available_messages}")
+        print(f"available message : {available_messages}")
+        print(f"available message : {available_messages}")
+        print(f"available message : {available_messages}")
+        print(f"available message : {available_messages}")
+              
 
 
    

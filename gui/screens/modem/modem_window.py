@@ -19,11 +19,12 @@ from src.messaging import Messaging
 from src.sms import SMS
 
 class ModemWindow(Gtk.Window):
-    def __init__(self, modem_properties, modem_name, modem_path, modem_handler):
+    def __init__(self, modem_properties, modem_name, modem_path, modem_handler, messaging):
         super().__init__(title="Deku Linux App")
         self.connect("destroy", Gtk.main_quit)
         self.set_default_size(800, 600)
-        self.messaging = None  
+        # self.messaging = None  
+        self.messaging = messaging
         # self.modem_handler = ModemHandler()
         self.modem_handler = modem_handler
         self.modem_handler.handle_modem_connected()
@@ -219,7 +220,22 @@ class ModemWindow(Gtk.Window):
         # Append the new message to IncomingMessageWindow
         if self.incoming_view:
             # Use GLib.idle_add to ensure the UI updates on the main thread
-            GLib.idle_add(self.incoming_view.display_all_messages, [message])
+            GLib.idle_add(self.incoming_view.message_ui, [message])
+    # def new_msg_handler(self, message_path, sim_imsi):
+        # """Callback method to handle new messages and update the UI."""
+        # print(f"New message path received for {self.modem_name}: {message_path}")
+
+        # # Convert message_path to SMS instance
+        # try:
+        #     message = SMS(message_path, self.messaging)
+        #     print(f"Converted message: {message}")
+        # except Exception as e:
+        #     print(f"Error converting message path to SMS: {e}")
+        #     return  # Exit if there was an error
+        
+        # # Check if IncomingMessageWindow exists and update it
+        # if self.incoming_view:
+        #     GLib.idle_add(self.incoming_view.message_ui, [message])
 
 
 
@@ -234,7 +250,7 @@ class ModemWindow(Gtk.Window):
         self.stack.add_named(send_view, "send")
 
         # incoming view
-        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler)
+        self.incoming_view = IncomingMessageWindow( self.modem_name, self.modem_handler, self.messaging)
         self.stack.add_named(self.incoming_view, "incoming")
 
         # outgoing view
@@ -287,7 +303,7 @@ class ModemWindow(Gtk.Window):
         if self.messaging:
             all_messages = self.messaging.messaging.List()  # Fetch all messages
             print("Retrieved all messages:", all_messages)
-            self.incoming_view.display_all_messages(all_messages)
+            self.incoming_view.message_ui(all_messages)
         
         # Switch to incoming view
         self.stack.set_visible_child_name("incoming")
