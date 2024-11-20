@@ -175,14 +175,8 @@ class DekuLinux(Gtk.Window):
         print(f"available message : {available_messages}")
         print(f"available message : {available_messages}")
         print(f"available message : {available_messages}")
-        print(f"available message : {available_messages}")
-              
-
-
-   
-
-        
-        
+        print(f"available message : {available_messages}")        
+        self.destroy()
         modem_window.show_all()
 
     def apply_css(self):
