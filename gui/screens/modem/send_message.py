@@ -228,8 +228,12 @@ class SendMessageWindow(Gtk.Box):
         number = self.number_entry.get_text()
         result = self.modem_handler.send_messages(text, number, self.modem_name)
 
-        self.show_message_sent_popover()
-        self.reload_send_ui()
+        # self.show_message_sent_popover()
+        dialog = MessageSentPopUp(self)
+        response = dialog.run()
+        # GLib.timeout_add_seconds(3, dialog.destroy())
+
+        # GLib.idle_add(dialog.destroy()) #does not solve crash and wait
 
 
         # OutgoingMessageWindow.reload_outgoing_messages()
@@ -238,6 +242,7 @@ class SendMessageWindow(Gtk.Box):
 
 
         # GLib.idle_add(self.reload_send_ui())
+        self.reload_send_ui()
 
 
 
@@ -297,4 +302,25 @@ class SecurePopUp(Gtk.Dialog):
         area = self.get_content_area()
         action_area = self.get_action_area()
         action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
+        self.show_all()
+
+class MessageSentPopUp(Gtk.Dialog):
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Enable Secure Connection", Gtk.DialogFlags.MODAL, parent=None)
+
+        # self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        # self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+
+        self.set_default_size(200, 100)
+        self.set_border_width(30)
+
+        box= Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        label = Gtk.Label("Message Sent Successfully")
+        box.pack_start(label, True, True, 10)
+        area = self.get_content_area()
+        area.add(box)
+
+        # area = self.get_content_area()
+        # action_area = self.get_action_area()
+        # action_area.set_layout(Gtk.ButtonBoxStyle.CENTER)
         self.show_all()
