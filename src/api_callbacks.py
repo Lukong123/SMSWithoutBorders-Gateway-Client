@@ -1,5 +1,7 @@
 import base64
+from genericpath import exists
 import logging
+import os
 import time
 import datetime
 
@@ -167,44 +169,76 @@ class ModemHandler:
 
     def send_messages(self,  text: str, number: str, modem_imsi ):
         try:
-
-            # # modem = modem_manager.get_modem(modem_path)
-            # alice = x25519("alice_keys.db")
-            # alice_public_key_original = alice.init()
-
-            # bob = x25519("bob_keys.db")
-            # bob_public_key_original = bob.init()
-
-            # SK = alice.agree(bob_public_key_original)
-            # SK1 = bob.agree(alice_public_key_original)
-            # # original_plaintext = b"Sending double ratchet messsage"
-
-            # alice_state = States()
-            # text_base64 = base64.b64encode(text.encode('utf-8'))
-
-            # Ratchets.alice_init(
-            #     alice_state, SK, bob_public_key_original, "alice_keys"
-            # )
-            # header, alice_ciphertext = Ratchets.encrypt(
-            #     state=alice_state,
-            #      data=text_base64, AD=bob_public_key_original
-            # )
-
-            # print(f"alice cipher text: {alice_ciphertext}")
+        #     timestamp = time.time()
 
 
-            # s_header = header.serialize()
-            # a_header1 = HEADERS.deserialize(s_header)
+        #     message_id = MessageStore().store(
+        #     modem_imsi, text, number,
+        #     timestamp, 'outgoing', 'sending')
+
+        #     msg = self.messaging.send_sms( text, number)
+        #     logging.debug("Modem IMSI: %s", modem_imsi)
+        #     logging.debug("message success text:%s, and number: %s ", text,number)
+        #     logging.info("sent sms successfully! info")
+        #     logging.info("Message Id: %s", message_id)
+        
+        # except Exception as error:
+        #     logging.exception(f"exception as an error for sent message: {error}")
+
+        
+        # =======================================================================
+        # =======================================================================
+
+
+
+            # modem = modem_manager.get_modem(modem_path)
+        #     db = "alice_keys.db"
+        #     # if exists "alice_keys.db":
+            if os.path.exists("alice_keys.db"):
+            # If the file exists, load it
+                alice = x25519("alice_keys.db")
+                timestamp = time.time()
+
+                print("found the db")
+            else:
+                print("did not find the db")
+                alice = x25519("alice_keys.db")
+                alice_public_key_original = alice.init()
+
+            bob = x25519("bob_keys.db")
+            bob_public_key_original = bob.init()
+
+            SK = alice.agree(bob_public_key_original)
+            SK1 = bob.agree(alice_public_key_original)
+            # original_plaintext = b"Sending double ratchet messsage"
+
+            alice_state = States()
+            text_base64 = base64.b64encode(text.encode('utf-8'))
+
+            Ratchets.alice_init(
+                alice_state, SK, bob_public_key_original, "alice_keys"
+            )
+            header, alice_ciphertext = Ratchets.encrypt(
+                state=alice_state,
+                data=text_base64, AD=bob_public_key_original
+            )
+
+            print(f"alice cipher text: {alice_ciphertext}")
+
+            s_header = header.serialize()
+            a_header1 = HEADERS.deserialize(s_header)
 
             timestamp = time.time()
+            alice_ciphertext_base64 = base64.b64encode(alice_ciphertext).decode("utf-8")
+
 
             message_id = MessageStore().store(
                 modem_imsi, text, number,
                 timestamp, 'outgoing', 'sending')
 
-            msg = self.messaging.send_sms( text, number)
+            msg = self.messaging.send_sms( alice_ciphertext_base64, number)
             logging.debug("Modem IMSI: %s", modem_imsi)
-            logging.debug("message success text:%s, and number: %s ", text,number)
+            logging.debug("message success text:%s, and number: %s ", alice_ciphertext_base64,number)
             logging.info("sent sms successfully! info")
             logging.info("Message Id: %s", message_id)
         
@@ -299,7 +333,7 @@ first_modem = modem_names[0]
 # test_apisend = handler.sending_api(first_modem,"Testing that sending api send", "687022472" )
 # test_apisend = handler.send_messages(first_modem,"Testing that to see url", "687022472" )
 
-# test_getget = handler.get_get_incoming_message(  '/org/freedesktop/ModemManager1/Modem/1')
+# test_getget = handler.get_687022472get_incoming_message(  '/org/freedesktop/ModemManager1/Modem/1')
 
 # test_send = handler.send_messages(  "should delete","687022472", first_modem)
 # test_delete = handler.delete_message('13')
